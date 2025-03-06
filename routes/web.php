@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnalyticsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,4 +16,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::prefix('dashboard')->group(function () {
+    Route::controller(AnalyticsController::class)->group(function () {
+        Route::get('/sales', 'predictSales')->name('analytics.sales');
+        Route::get('/recommendations/{customer_id}', 'recommendProducts')->name('analytics.recommendations');
+    });
 });
