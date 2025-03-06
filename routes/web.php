@@ -22,5 +22,6 @@ Route::prefix('dashboard')->group(function () {
     Route::controller(AnalyticsController::class)->group(function () {
         Route::get('/sales', 'predictSales')->name('analytics.sales');
         Route::get('/recommendations/{customer_id}', 'recommendProducts')->name('analytics.recommendations');
+        Route::get('/report', 'exportPDF')->name('analytics.pdf');
     });
 });
