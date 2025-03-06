@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\CustomerController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,8 @@ Route::get('/', function () {
 });
 
 Route::prefix('dashboard')->group(function () {
+    Route::get('/home', [DashboardController::class, 'index']);
+
     Route::controller(AnalyticsController::class)->group(function () {
         Route::get('/sales', 'predictSales')->name('analytics.sales');
         Route::get('/recommendations/{customer_id}', 'recommendProducts')->name('analytics.recommendations');
