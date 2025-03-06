@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -25,3 +26,5 @@ Route::prefix('dashboard')->group(function () {
         Route::get('/report', 'exportPDF')->name('analytics.pdf');
     });
 });
+
+Route::get('/customer/{id}/points', [CustomerController::class, 'showPoints']);
