@@ -10,6 +10,6 @@ class DashboardController extends Controller
     public function index()
     {
         $customers = Customer::all();
-        return view('dashboard', compact('customers'));
+        return view('dashboard.home', compact('customers'));
     }
 }

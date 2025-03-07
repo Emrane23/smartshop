@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('customers', function (Blueprint $table) {
-            $table->boolean('reward_notified')->default(false);
+            $table->boolean('reward_notified')->after('points')->default(false);
         });
     }
 
