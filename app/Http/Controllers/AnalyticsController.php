@@ -9,23 +9,6 @@ use Illuminate\Support\Facades\DB;
 
 class AnalyticsController extends Controller
 {
-    public function predictSales()
-    {
-        $sales = DB::table('order_items')
-            ->selectRaw('product_id, SUM(quantity) as total_sales')
-            ->groupBy('product_id')
-            ->get();
-
-        $predictions = $sales->map(function ($sale) {
-            return (object) [
-                'product_id' => $sale->product_id,
-                'predicted_sales' => $sale->total_sales * 1.1, // Augmentation de 10%
-            ];
-        });
-
-        return view('analytics', compact('sales', 'predictions'));
-    }
-
     public function recommendProducts($customer_id)
     {
         $purchased_products = DB::table('order_items')
@@ -46,10 +29,10 @@ class AnalyticsController extends Controller
     public function exportPDF()
     {
         $sales = DB::table('order_items')
-        ->join('products', 'order_items.product_id', '=', 'products.id')  // Jointure avec la table `products`
-        ->selectRaw('products.name as product_name, SUM(order_items.quantity) as total_sales')
-        ->groupBy('order_items.product_id', 'products.name')  // Groupement par `product_id` et `product_name`
-        ->get();
+            ->join('products', 'order_items.product_id', '=', 'products.id')
+            ->selectRaw('products.name as product_name, SUM(order_items.quantity) as total_sales')
+            ->groupBy('order_items.product_id', 'products.name')
+            ->get();
 
         $sales = $sales->map(function ($sale) {
             $sale->predicted_sales = $sale->total_sales * 1.1; // +10% pour la prédiction

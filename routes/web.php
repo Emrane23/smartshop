@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\AnalyticsController;
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,15 +21,39 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about', function () {
+    return view('frontoffice.pages.about');
+})->name('about');
+Route::get('/products/{id}', [HomeController::class, 'showProduct'])->name('frontoffice.products.show');
+
+
+Route::post('/login', [AuthController::class, 'login'])->name('login.submit')->middleware('guest:customer,web');
+Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.show')->middleware('guest:customer,web');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware(['auth:web,customer'])->group(function () {
+    Route::get('/customer-area', [CustomerController::class, 'CustomerArea'])->name('customer.area');
+    Route::get('/cart', function () {
+        return view('frontoffice.pages.cart');
+    })->name('cart.show');
+    Route::post('/order/store', [OrderController::class, 'store'])->name('order.store');
+});
+
 
 Route::prefix('dashboard')->group(function () {
-    Route::get('/home', [DashboardController::class, 'index']);
+    Route::middleware(['role:admin'])->group(function () {
+        Route::get('/home', [DashboardController::class, 'index'])->name('dashboard.home');
+        Route::resource('products', ProductController::class);
+        Route::get('/orders', [OrderController::class, 'index'])->name('dashboard.orders.index');
+    });
+
 
     Route::controller(AnalyticsController::class)->group(function () {
         Route::get('/sales', 'predictSales')->name('analytics.sales');
         Route::get('/recommendations/{customer_id}', 'recommendProducts')->name('analytics.recommendations');
-        Route::get('/report', 'exportPDF')->name('analytics.pdf');
+        Route::get('/report', 'exportPDF')->name('sales.report.download');
     });
 });
+
 
 Route::get('/customer/{id}/points', [CustomerController::class, 'showPoints']);

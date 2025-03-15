@@ -1,5 +1,4 @@
-﻿
-/*=============================================================
+﻿/*=============================================================
     Authour URI: www.binarytheme.com
     License: Commons Attribution 3.0
 
@@ -18,196 +17,416 @@
     GENERAL STYLES
 ==================================================*/
 body {
-          font-family:'Open Sans', sans-serif;
-    font-size:14px;
+    padding-top: 70px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding-top: 90px;
+    }
+}
+
+/* Pour les petits écrans (mobiles) */
+@media (max-width: 576px) {
+    body {
+        padding-top: 110px;
+    }
 }
 
 
 .text-center {
-    text-align:center;
+    text-align: center;
 }
 
 
-h1, h2, h3, h4, h5, h6 {
-    font-family:'Open Sans', sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Open Sans', sans-serif;
 }
+
 .alg-right-pad {
-    float:right;
-    padding-right:20px;
+    float: right;
+    padding-right: 20px;
 }
+
 a:hover {
-    text-decoration:none;
+    text-decoration: none;
 }
 
 /*=======================================
   NAVBAR ADJUSTMENTS
 ==================================================*/
 .navbar-brand {
-font-size: 25px;
-padding: 15px 80px 15px 60px;
-}
-.navbar-default .navbar-brand {
-color: #000000;
-}
-.navbar-default {
-background-color: #000000;
-border-color: #000000;
-}
-.navbar {
- border-radius: 0px; 
-}
-.navbar-default .navbar-nav > li > a {
-color: #FFF;
-}
-.navbar-default .navbar-nav > li > a:hover {
-color: #FFF;
+    font-size: 25px;
+    padding: 15px 80px 15px 60px;
 }
 
 .navbar-default .navbar-brand {
-color: #FFFFFF;
+    color: #000000;
 }
+
+.navbar-default {
+    background-color: #000000;
+    border-color: #000000;
+}
+
+.navbar {
+    border-radius: 0px;
+}
+
+.navbar-default .navbar-nav>li>a {
+    color: #FFF;
+}
+
+.navbar-default .navbar-nav>li>a:hover {
+    color: #FFF;
+}
+
+.navbar-default .navbar-brand {
+    color: #FFFFFF;
+}
+
 .navbar-default .navbar-brand:hover {
-color: #FFFFFF;
+    color: #FFFFFF;
 }
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
-color: #050505;
-background-color: #FFFFFF;
+
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:hover,
+.navbar-default .navbar-nav>.open>a:focus {
+    color: #FFFFFF;
+    background-color: #ffffffe1;
 }
-.navbar-default .navbar-nav .open .dropdown-menu > li > a {
-color: #000;
+
+.navbar-default .navbar-nav .open .dropdown-menu>li>a {
+    color: #000;
 }
-.navbar-default .navbar-nav .open .dropdown-menu > li > a:hover {
-color: #000;
+
+.navbar-default .navbar-nav .open .dropdown-menu>li>a:hover {
+    color: #000;
 }
+
+@keyframes cartBounce {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.cart-bounce {
+    animation: cartBounce 0.3s ease-in-out;
+}
+
+.cart-sidebar {
+    position: fixed;
+    right: -370px;
+    /* Légèrement décalé pour le margin */
+    top: 60px;
+    /* Légèrement sous la navbar */
+    width: 350px;
+    height: calc(100% - 80px);
+    /* Laisser un espace en bas */
+    background: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease-in-out;
+    padding: 15px;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    /* Bord arrondi */
+    margin-right: 5px;
+    /* Ajout d'un margin-right */
+}
+
+.cart-sidebar.active {
+    right: 20px;
+    /* Décale pour respecter le margin */
+}
+
+.cart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.remove-btn-product {
+    background: none;
+    border: none;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.cart-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    /* Scrollable verticalement */
+    margin-top: 10px;
+    padding-right: 5px;
+    /* Pour éviter la superposition avec la scrollbar */
+}
+
+.cart-footer {
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
+
+.cart-footer h5 {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.cart-item img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.cart-item-details {
+    flex-grow: 1;
+}
+
+.cart-item-details span {
+    font-weight: bold;
+    color: red;
+    /* Prix en rouge */
+}
+
+.cart-sidebar {
+    position: fixed;
+    right: -370px;
+    top: 60px;
+    width: 350px;
+    height: calc(100% - 80px);
+    background: #fff;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    transition: right 0.3s ease-in-out;
+    padding: 15px;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    border-radius: 10px;
+    /* Bord arrondi */
+    margin-right: 20px;
+    /* Ajout du margin-right */
+}
+
+.cart-sidebar.active {
+    right: 20px;
+}
+
+.cart-footer h5 {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+.cart-footer h5 span {
+    color: red;
+    /* Seulement le prix en rouge */
+}
+
+.cart-item-details span {
+    font-weight: bold;
+    color: red;
+    /* Prix en rouge */
+}
+
+/* Version mobile : Réduire la hauteur */
+@media (max-width: 768px) {
+    .cart-sidebar {
+        width: 60%;
+        height: 50vh;
+        /* Ne couvre pas tout l'écran */
+        right: -100%;
+        border-radius: 15px;
+        /* Plus arrondi */
+    }
+
+    .cart-sidebar.active {
+        right: 5%;
+    }
+}
+
 /*=======================================
   BOOTSTRAP ADJUSTMENTS
 ==================================================*/
 .row {
-    margin-bottom:10px;
+    margin-bottom: 10px;
 }
+
 .btn {
-    margin-bottom:5px;
+    margin-bottom: 5px;
 }
+
 /*=======================================
   INDEX PAGE
 ==================================================*/
 
 .box-border {
-    border:1px solid #e1e1e1;
+    border: 1px solid #e1e1e1;
 }
 
-.product-box h3>a,.product-box h3>a:hover,.product-box h3>a:focus {
-    color:#000;
-    text-decoration:none;
+.product-box h3>a,
+.product-box h3>a:hover,
+.product-box h3>a:focus {
+    color: #000;
+    text-decoration: none;
 }
 
 .offer-box {
-background-color: #6A75F0;
-border: 1px solid #096FC0;
-color: #fff;
-font-weight: 900;
-font-size:16px;
+    background-color: #6A75F0;
+    border: 1px solid #096FC0;
+    color: #fff;
+    font-weight: 900;
+    font-size: 16px;
 }
-    .offer-box a {
-        color: #fff;
-        text-decoration: none;
-        font-size: 16px;
-        font-weight: normal;
-    }
-    .offer-box a:hover {
-        color:#000;
-    }
+
+.offer-box a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.offer-box a:hover {
+    color: #000;
+}
+
 .list-group a {
-   
-    font-size:14px;
-    font-weight:900;
-    color:#808080;
+
+    font-size: 14px;
+    font-weight: 900;
+    color: #808080;
 }
+
 .list-group a:hover {
-     color:#000;
-    text-decoration:none;
+    color: #000;
+    text-decoration: none;
 }
+
 .offer-colors {
-   background-color: #B05FDD;
-border: 1px solid #A228F3;
+    background-color: #B05FDD;
+    border: 1px solid #A228F3;
 }
 
 .download-app-box {
     background-color: #069E98;
-border: 1px solid #0FAA8B;
-padding:30px;
-line-height:40px;
-font-size:25px;
-font-weight:900;
-color:#fff;
+    border: 1px solid #0FAA8B;
+    padding: 30px;
+    line-height: 40px;
+    font-size: 25px;
+    font-weight: 900;
+    color: #fff;
 }
+
 /*=======================================
   SLIDER main-style.css Changes
 ==================================================*/
 .mi-slider {
-margin-top: 0px;
+    margin-top: 0px;
 }
 
-.offer-text
-{
-position: absolute;
-color: #FFF;
-padding: 14px 16px 12px 16px;
-margin-top: 10px;
-background-color:#18b424;
+.offer-text {
+    position: absolute;
+    color: #FFF;
+    padding: 14px 16px 12px 16px;
+    margin-top: 10px;
+    background-color: #18b424;
 
 }
-.offer-text2
-{
-position: absolute;
-color: #FFF;
-padding: 14px 16px 12px 16px;
-margin-top: 10px;
-background-color:#EB0429;
+
+.offer-text2 {
+    position: absolute;
+    color: #FFF;
+    padding: 14px 16px 12px 16px;
+    margin-top: 10px;
+    background-color: #EB0429;
 
 }
+
 /*=======================================
   FOOTER SECTION
 ==================================================*/
 .footer-box {
-    background-color:#F5F5F5;
-    padding:20px 50px 20px 50px;
-    
-    
+    background-color: #F5F5F5;
+    padding: 20px 50px 20px 50px;
+
+
 }
+
 .small-box {
-    font-size:10px;
+    font-size: 10px;
 }
 
 .footer-box a {
-    color:#808080;
-    text-decoration:none;
+    color: #808080;
+    text-decoration: none;
 }
+
 .footer-box a:hover {
-    color:#000;
+    color: #000;
 }
+
 .pad-botom {
-    padding-bottom:30px;
+    padding-bottom: 30px;
 }
+
 .footer-box p {
-    padding-top:15px;
-    padding-bottom:15px;
-    line-height:25px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    line-height: 25px;
 }
-.social-box a{
-     color:#333436;
-    text-decoration:none;
+
+.social-box a {
+    color: #333436;
+    text-decoration: none;
 }
 
 .end-box {
-    padding:20px;
-     color:#fff;
-     background-color:#000;
-     font-size:14px;
+    padding: 20px;
+    color: #fff;
+    background-color: #000;
+    font-size: 14px;
 }
 
 .suggestions-carousel img {
-    width: 100%;  /* S’adapte à la largeur du conteneur */
-    height: 200px; /* Hauteur fixe */
-    object-fit: cover; /* Coupe et ajuste l’image pour qu’elle remplisse bien l’espace */
+    width: 100%;
+    /* S’adapte à la largeur du conteneur */
+    height: 200px;
+    /* Hauteur fixe */
+    object-fit: cover;
+    /* Coupe et ajuste l’image pour qu’elle remplisse bien l’espace */
 }

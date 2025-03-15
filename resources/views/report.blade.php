@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Rapport des Ventes</title>
+    <title>Sales Report</title>
 </head>
 <body>
-    <h1>Rapport des Ventes</h1>
+    <h1>Sales Report</h1>
     <table border="1">
         <tr>
-            <th>Produit</th>
-            <th>Ventes</th>
-            <th>Prédiction</th>
+            <th>Product</th>
+            <th>Sales</th>
+            <th>Prediction</th>
         </tr>
         @foreach($sales as $sale)
         <tr>
-            <td>{{ $sale->product_name }}</td> <!-- Afficher le nom du produit -->
+            <td>{{ $sale->product_name }}</td>
             <td>{{ $sale->total_sales }}</td>
             <td>{{ $sale->predicted_sales }}</td>
         </tr>

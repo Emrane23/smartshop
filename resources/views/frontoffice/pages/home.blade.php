@@ -22,74 +22,57 @@
                 @foreach ($products as $product)
                     <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 text-center">
                         <div class="thumbnail product-box">
-                            <img src="{{ $product->image }}" alt="{{ $product->name }}"
+                            <img src="{{ url($product->image) }}" alt="{{ $product->name }}"
                                 style="width: 166px; height: 166px;" />
                             <div class="caption">
-                                <h3><a href="#">
+                                <h3><a href="{{ route('frontoffice.products.show', ['id' => $product->id]) }}">
                                         {{ $product->name }}
                                     </a></h3>
-                                <p><strong>Description:</strong> {{ Str::limit($product->description, 50, ' ...') }}
+                                <p>{{ Str::limit($product->description, 50, ' ...') }}
                                 </p>
                                 <p><strong>Price:</strong>
                                     {{ $product->price }} Dt</p>
-                                <p><small>Created at:
+                                <p><small>Shared at:
                                         {{ $product->created_at->translatedFormat('M d, Y') }}
                                     </small></p>
-                                <p><a href="#" class="btn btn-primary" role="button">See Details</a></p>
+                                <div class="btn-group" role="group">
+                                    <a href="{{ route('frontoffice.products.show', ['id' => $product->id]) }}"
+                                        class="btn btn-primary me-2">See Details</a>
+                                </div>
+
+                                </p>
                             </div>
                         </div>
                     </div>
                 @endforeach
 
-                <div class="col-md-12 text-center">
-                    {{ $products->links() }}
-                </div>
-                <hr>
+
             </div>
+            <div class="col-md-12 text-center">
+                {{ $products->links() }}
+            </div>
+            <hr>
         </div>
 
-        <!-- Suggestions en slider (Bootstrap 3.1) -->
         <div class="col-md-3">
             <h4 class="text-center">Suggestions</h4>
             <hr>
-            <div id="suggestionsCarousel" class="carousel slide" data-ride="carousel">
+            <div id="suggestionsCarousel" class="carousel slide" data-ride="carousel" data-interval="3000">
                 <div class="carousel-inner">
-                    <div class="item active">
-                        <div class="offer-text">
-                            30% off here
-                        </div>
-                        <div class="thumbnail product-box text-center">
-                            <img src="assets/img/dummyimg.png" alt="Produit 1"
-                                class="img-responsive suggestions-carousel" />
-                            <div class="caption">
-                                <h5><a href="#">Produit 1</a></h5>
+                    @foreach ($recommended_products as $index => $suggestion)
+                        <div class="item {{ $index == 0 ? 'active' : '' }}">
+                            <div class="offer-text">
+                                {{ $suggestion->offer_text ?? 'Offre spéciale' }}
+                            </div>
+                            <div class="thumbnail product-box text-center">
+                                <img src="{{ url($suggestion->image ?? 'assets/img/products/default-product-image.jpg') }}"
+                                    alt="{{ $suggestion->name }}" class="img-responsive suggestions-carousel" />
+                                <div class="caption">
+                                    <h5><a href="{{ route('frontoffice.products.show', ['id' => $product->id]) }}">{{ $suggestion->name }}</a></h5>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="item">
-                        <div class="offer-text">
-                            Special Offer!
-                        </div>
-                        <div class="thumbnail product-box text-center">
-                            <img src="assets/img/dummyimg.png" alt="Produit 2"
-                                class="img-responsive suggestions-carousel" />
-                            <div class="caption">
-                                <h5><a href="#">Produit 2</a></h5>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="item">
-                        <div class="offer-text">
-                            Limited Time Deal!
-                        </div>
-                        <div class="thumbnail product-box text-center">
-                            <img src="assets/img/dummyimg.png" alt="Produit 3"
-                                class="img-responsive suggestions-carousel" />
-                            <div class="caption">
-                                <h5><a href="#">Produit 3</a></h5>
-                            </div>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
 
                 <!-- Contrôles du slider -->
@@ -101,7 +84,6 @@
                 </a>
             </div>
         </div>
-
 
     </div>
 @endsection

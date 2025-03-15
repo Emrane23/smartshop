@@ -9,12 +9,17 @@ class Product extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'price', 'stock'];
+    protected $fillable = ['name', 'image', 'description', 'price', 'stock'];
 
     public function orders()
     {
         return $this->belongsToMany(Order::class, 'order_items')
             ->withPivot('quantity', 'price')
             ->withTimestamps();
+    }
+
+    public function getImageAttribute($value)
+    {
+        return $value ?? 'assets/img/products/default-product-image.jpg';
     }
 }

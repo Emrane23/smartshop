@@ -9,94 +9,111 @@ use App\Models\Product;
 use App\Notifications\LoyaltyReward;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
 
+    public function index()
+    {
+        $orders = Order::with('products')->orderBy('created_at','DESC')->get();
+        return view('dashboard.orders.index', compact('orders'));
+    }
+
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'products' => ['required', 'array', 'min:1'],
+            'products.*' => ['exists:products,id'],
+        ], [
+            'products.required' => 'You must add at least one product to your order.',
+            'products.min' => 'You must select at least one product.',
+            'products.*.exists' => 'One of the selected products does not exist.',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'La validation a échoué.',
+                'errors' => $validator->errors()
+            ], 422);
+        }
         DB::beginTransaction();
 
         try {
-            // Récupérer le client
-            $customer = Customer::findOrFail($request->customer_id);
+            $customer = auth()->guard('customer')->user();
             $discount = 0;
 
-            // Vérifier si le client a plus de 100 points pour appliquer une réduction
             if ($customer->points >= 100) {
-                $discount = 10; // Réduction de 10 dinars pour 100 points
-                $customer->decrement('points', 100); // Soustraire les points
+                $discount = 10;
+                $customer->decrement('points', 100);
             }
 
-            // Calculer le total final après application de la réduction
-            $finalTotal = max($request->total - $discount, 0);
+            $orderItems = [];
+            $total = 0;
 
-            // Créer la commande
-            $order = Order::create([
-                'customer_id' => $customer->id,
-                'total' => $finalTotal, // Utiliser le total après réduction
-            ]);
+            $productCounts = array_count_values($request->products);
 
-            // Récupérer les produits à partir de la base de données en une seule requête
-            $productIds = collect($request->items)->pluck('product_id');
+            $productIds = array_keys($productCounts);
             $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
 
-            // Créer les items de la commande (produits achetés)
-            $orderItems = [];
-            foreach ($request->items as $item) {
-                $product = $products->get($item['product_id']);
+            foreach ($productCounts as $productId => $quantity) {
+                $product = $products->get($productId);
 
-                // Vérifier si le stock est suffisant
-                if ($product->stock >= $item['quantity']) {
-                    // Ajouter l'item à la commande
-                    $orderItems[$item['product_id']] = [
-                        'quantity' => $item['quantity'],
-                        'price' => $item['price'],
+                if (!$product) {
+                    throw new \Exception("Product ID {$productId} does not exist.");
+                }
+
+                if ($product->stock >= $quantity) {
+                    $orderItems[$product->id] = [
+                        'quantity' => $quantity,
+                        'price' => $product->price,
                     ];
 
-                    // Décrémenter le stock du produit
-                    $product->decrement('stock', $item['quantity']);
+                    $product->decrement('stock', $quantity);
+
+                    $total += $product->price * $quantity;
                 } else {
-                    throw new \Exception("Le produit {$product->name} n'a pas assez de stock.");
+                    throw new \Exception("The product {$product->name} does not have enough stock.");
                 }
             }
 
-            // Ajouter les produits à la commande
+            $finalTotal = max($total - $discount, 0);
+
+            $order = Order::create([
+                'customer_id' => $customer->id,
+                'total' => $finalTotal,
+            ]);
+
             $order->products()->attach($orderItems);
 
-            // Ajouter des points sur le montant final (1 point par 10 dinars dépensés)
             $pointsEarned = floor($finalTotal / 10);
             $customer->increment('points', $pointsEarned);
 
-            // Vérifier si les points sont supérieurs ou égaux à 500
             if ($customer->points >= 500) {
-                // Si les points dépassent 500 et que l'email n'a pas encore été envoyé
+                dd($customer->points);
                 if ($customer->reward_notified !== true) {
-                    // Envoyer la notification
                     Notification::send($customer, new LoyaltyReward($customer));
-
-                    // Mettre à jour le statut de notification
                     $customer->update(['reward_notified' => true]);
                 }
             } else {
-                // Si les points sont en dessous de 500, réinitialiser le statut de notification
                 $customer->update(['reward_notified' => false]);
             }
 
-            // Commit de la transaction
             DB::commit();
 
             return response()->json([
-                'message' => 'Commande passée avec succès',
+                'success' => true,
+                'message' => 'Order placed successfully',
                 'total_final' => $finalTotal,
                 'points_gagnés' => $pointsEarned,
             ]);
         } catch (\Exception $e) {
-            // Rollback en cas d'erreur
             DB::rollBack();
 
             return response()->json([
-                'message' => 'Erreur lors du passage de la commande',
+                'success' => false,
+                'message' => 'Error while placing the order',
                 'error' => $e->getMessage(),
             ], 500);
         }

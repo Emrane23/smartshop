@@ -2,8 +2,9 @@
 @section('content')
     <div class="row" style="display: flex; justify-content: center;">
         <div class="col-md-6">
-            <h2 class="text-center">Create account</h2>
-            <form method="POST">
+            <h2 class="text-center">Sign In</h2>
+            <form action="{{ route('login.submit') }}" method="POST">
+                @csrf
                 <div class="form-group">
                     <label>Email:</label>
                     <input type="email" name="email" class="form-control" required>
