@@ -13,10 +13,9 @@ use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
-
     public function index()
     {
-        $orders = Order::with('products')->orderBy('created_at','DESC')->get();
+        $orders = Order::with('products')->orderBy('created_at', 'DESC')->get();
         return view('dashboard.orders.index', compact('orders'));
     }
 
@@ -38,14 +37,15 @@ class OrderController extends Controller
                 'errors' => $validator->errors()
             ], 422);
         }
+
         DB::beginTransaction();
 
         try {
             $customer = auth()->guard('customer')->user();
-            $discount = 0;
+            $loyaltyDiscount = 0;
 
             if ($customer->points >= 100) {
-                $discount = 10;
+                $loyaltyDiscount = 10;
                 $customer->decrement('points', 100);
             }
 
@@ -53,7 +53,6 @@ class OrderController extends Controller
             $total = 0;
 
             $productCounts = array_count_values($request->products);
-
             $productIds = array_keys($productCounts);
             $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
 
@@ -65,20 +64,23 @@ class OrderController extends Controller
                 }
 
                 if ($product->stock >= $quantity) {
+                    $price = (float) $product->price;
+                    $discountedPrice = $product->discount ? $price - ($price * $product->discount / 100) : $price;
+
                     $orderItems[$product->id] = [
                         'quantity' => $quantity,
-                        'price' => $product->price,
+                        'price' => $discountedPrice,
                     ];
 
                     $product->decrement('stock', $quantity);
 
-                    $total += $product->price * $quantity;
+                    $total += $discountedPrice * $quantity;
                 } else {
                     throw new \Exception("The product {$product->name} does not have enough stock.");
                 }
             }
 
-            $finalTotal = max($total - $discount, 0);
+            $finalTotal = max($total - $loyaltyDiscount, 0);
 
             $order = Order::create([
                 'customer_id' => $customer->id,
@@ -91,8 +93,7 @@ class OrderController extends Controller
             $customer->increment('points', $pointsEarned);
 
             if ($customer->points >= 500) {
-                dd($customer->points);
-                if ($customer->reward_notified !== true) {
+                if (!$customer->reward_notified) {
                     Notification::send($customer, new LoyaltyReward($customer));
                     $customer->update(['reward_notified' => true]);
                 }

@@ -29,6 +29,11 @@
                 </div>
 
                 <div class="mb-3">
+                    <label for="discount" class="form-label">Discount (%)</label>
+                    <input type="number" class="form-control" id="discount" name="discount" value="{{ old('discount', $product->discount) }}" min="0" max="80">
+                </div>
+
+                <div class="mb-3">
                     <label for="stock" class="form-label">Stock</label>
                     <input type="number" class="form-control" id="stock" name="stock" value="{{ old('stock', $product->stock) }}" required>
                 </div>

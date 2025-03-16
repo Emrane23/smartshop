@@ -57,19 +57,26 @@ document.addEventListener("DOMContentLoaded", function () {
             cartCount.style.display = "none";
         } else {
             cart.forEach((item, index) => {
+                let price = parseFloat(item.price);
+                let discountedPrice = item.discount ? price - (price * item.discount / 100) : price;
+
                 let li = document.createElement("li");
-                li.classList.add("cart-item", "animate__animated", "animate__fadeIn");
+                li.classList.add("cart-item", "d-flex", "align-items-center", "p-2", "border-bottom");
 
                 li.innerHTML = `
-                    <img src="${item.image}" alt="${item.name}">
-                    <div class="cart-item-details">
-                        <strong>${item.name}</strong>
-                        <br> <span>${parseFloat(item.price).toFixed(2)} TND</span>
+                    <img src="${item.image}" alt="${item.name}" class="me-3" style="width: 50px; height: 50px;">
+                    <div class="flex-grow-1">
+                        <strong>${item.name}</strong><br>
+                        ${item.discount
+                        ? `<span class="text-decoration-line-through text-danger">${price.toFixed(2)} TND</span>
+                                   <span class="fw-bold text-warning">${discountedPrice.toFixed(2)} TND</span>`
+                        : `<span class="fw-bold">${price.toFixed(2)} TND</span>`
+                    }
                     </div>
                     <button class="remove-btn-product" data-index="${index}">&times;</button>
                 `;
                 cartItemsContainer.appendChild(li);
-                total += parseFloat(item.price);
+                total += discountedPrice;
             });
 
             cartCount.textContent = cart.length;
@@ -92,11 +99,20 @@ document.addEventListener("DOMContentLoaded", function () {
             cartItemsContainer.innerHTML = `<tr><td colspan="4" class="text-center">Your Cart is empty.</td></tr>`;
         } else {
             cart.forEach((item, index) => {
+                let price = parseFloat(item.price);
+                let discountedPrice = item.discount ? price - (price * item.discount / 100) : price;
+
                 let tr = document.createElement("tr");
                 tr.innerHTML = `
-                    <td><img src="${item.image}" alt="${item.name}" style="width: 50px;"></td>
+                    <td><img src="${item.image}" alt="${item.name}" class="img-fluid rounded" style="width: 50px;"></td>
                     <td>${item.name}</td>
-                    <td>${parseFloat(item.price).toFixed(2)} TND</td>
+                    <td>
+                        ${item.discount
+                        ? `<span class="text-decoration-line-through text-danger">${price.toFixed(2)} TND</span>
+                                   <span class="fw-bold text-warning">${discountedPrice.toFixed(2)} TND</span>`
+                        : `<span class="fw-bold">${price.toFixed(2)} TND</span>`
+                    }
+                    </td>
                     <td><button class="remove-btn-product" data-index="${index}">&times;</button></td>
                 `;
                 cartItemsContainer.appendChild(tr);
@@ -183,6 +199,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 id: this.dataset.id,
                 name: this.dataset.name,
                 price: parseFloat(this.dataset.price),
+                discount: this.dataset.discount ? parseFloat(this.dataset.discount) : 0, // Ajout du discount
                 image: this.dataset.image
             };
 

@@ -8,8 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Product extends Model
 {
     use HasFactory;
+    const DEFAULT_IMAGE = 'img/products/default-product-image.jpg';
 
-    protected $fillable = ['name', 'image', 'description', 'price', 'stock'];
+    protected $fillable = ['name', 'image', 'description', 'price', 'discount', 'stock'];
 
     public function orders()
     {
@@ -20,6 +21,6 @@ class Product extends Model
 
     public function getImageAttribute($value)
     {
-        return $value ?? 'assets/img/products/default-product-image.jpg';
+        return $value ?? static::DEFAULT_IMAGE;
     }
 }

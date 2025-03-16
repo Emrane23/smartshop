@@ -26,6 +26,7 @@
                             <th>Image</th>
                             <th>Name</th>
                             <th>Price</th>
+                            <th>Discount</th>
                             <th>Stock</th>
                             <th>Actions</th>
                         </tr>
@@ -34,6 +35,7 @@
                         <tr>
                             <th>Image</th>
                             <th>Price</th>
+                            <th>Discount</th>
                             <th>Stock</th>
                             <th>Actions</th>
                         </tr>
@@ -52,6 +54,13 @@
 
                                 <td>{{ $product->name }}</td>
                                 <td>{{ $product->price }}</td>
+                                <td>
+                                    @if ($product->discount)
+                                        {{ $product->discount }}%
+                                    @else
+                                        No Discount
+                                    @endif
+                                </td>
                                 <td>{{ $product->stock }}</td>
                                 <td>
                                     <a href="{{ route('products.show', ['product' => $product]) }}"

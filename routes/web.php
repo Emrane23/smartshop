@@ -29,10 +29,12 @@ Route::get('/products/{id}', [HomeController::class, 'showProduct'])->name('fron
 
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit')->middleware('guest:customer,web');
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login.show')->middleware('guest:customer,web');
+Route::post('/register', [AuthController::class, 'register'])->name('register.submit')->middleware('guest:customer,web');
+Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register.show')->middleware('guest:customer,web');
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/customer-area', [CustomerController::class, 'CustomerArea'])->name('customer.area')->middleware('auth:customer');
 Route::middleware(['auth:web,customer'])->group(function () {
-    Route::get('/customer-area', [CustomerController::class, 'CustomerArea'])->name('customer.area');
     Route::get('/cart', function () {
         return view('frontoffice.pages.cart');
     })->name('cart.show');

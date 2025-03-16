@@ -3,7 +3,7 @@
 @section('content')
     <div class="row">
         <div class="col-md-12">
-            <div class="well well-lg offer-box text-center">
+            <div class="alert alert-primary text-center" role="alert">
                 Welcome To Chick Deco & Cadeaux
             </div>
             <br />
@@ -11,79 +11,99 @@
     </div>
 
     <div class="row">
-        <!-- Liste des produits avec une bordure à droite -->
-        <div class="col-md-9" style="border-right: 1px solid #ddd; padding-right: 20px;">
-            <div>
+        <!-- Liste des produits -->
+        <div class="col-md-9 border-end pe-4">
+            <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
-                    <li><a href="{{ route('home') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ route('home') }}">Home</a></li>
                 </ol>
-            </div>
-            <div class="row">
-                @foreach ($products as $product)
-                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12 text-center">
-                        <div class="thumbnail product-box">
-                            <img src="{{ url($product->image) }}" alt="{{ $product->name }}"
-                                style="width: 166px; height: 166px;" />
-                            <div class="caption">
-                                <h3><a href="{{ route('frontoffice.products.show', ['id' => $product->id]) }}">
-                                        {{ $product->name }}
-                                    </a></h3>
-                                <p>{{ Str::limit($product->description, 50, ' ...') }}
-                                </p>
-                                <p><strong>Price:</strong>
-                                    {{ $product->price }} Dt</p>
-                                <p><small>Shared at:
-                                        {{ $product->created_at->translatedFormat('M d, Y') }}
-                                    </small></p>
-                                <div class="btn-group" role="group">
-                                    <a href="{{ route('frontoffice.products.show', ['id' => $product->id]) }}"
-                                        class="btn btn-primary me-2">See Details</a>
-                                </div>
+            </nav>
 
-                                </p>
+            <div class="row g-4">
+                @foreach ($products as $product)
+                    <div class="col-lg-4 col-md-6 text-center">
+                        <div class="card h-100 shadow-sm position-relative">
+                            @if ($product->discount)
+                                <img src="{{ asset('assets/img/offre-special.png') }}" alt="Special Offer"
+                                    class="offer-badge">
+                            @endif
+                            <img src="{{ url($product->image) }}" alt="{{ $product->name }}" class="card-img-top"
+                                style="width: 100%; height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    <a href="{{ route('frontoffice.products.show', ['id' => $product->id]) }}"
+                                        class="text-decoration-none">
+                                        {{ $product->name }}
+                                    </a>
+                                </h5>
+
+                                <p class="card-text">{{ Str::limit($product->description, 50, ' ...') }}</p>
+
+                                @if ($product->discount)
+                                    @php
+                                        $newPrice = $product->price - ($product->price * $product->discount) / 100;
+                                    @endphp
+                                    <p class="fw-bold text-muted text-decoration-line-through">{{ $product->price }} Dt</p>
+                                    <p class="fw-bold text-warning">{{ number_format($newPrice, 2) }} Dt
+                                        (-{{ $product->discount }}%)</p>
+                                @else
+                                    <p class="fw-bold text-danger">{{ $product->price }} Dt</p>
+                                @endif
+
+                                <p class="text-muted small">Shared at:
+                                    {{ $product->created_at->translatedFormat('M d, Y') }}</p>
+                                <a href="{{ route('frontoffice.products.show', ['id' => $product->id]) }}"
+                                    class="btn btn-primary">See Details</a>
                             </div>
+
                         </div>
                     </div>
                 @endforeach
-
-
             </div>
-            <div class="col-md-12 text-center">
+
+            <div class="col-md-12 text-center mt-4">
                 {{ $products->links() }}
             </div>
-            <hr>
         </div>
 
+        <!-- Suggestions -->
         <div class="col-md-3">
             <h4 class="text-center">Suggestions</h4>
             <hr>
-            <div id="suggestionsCarousel" class="carousel slide" data-ride="carousel" data-interval="3000">
+            <div id="suggestionsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
                 <div class="carousel-inner">
                     @foreach ($recommended_products as $index => $suggestion)
-                        <div class="item {{ $index == 0 ? 'active' : '' }}">
-                            <div class="offer-text">
-                                {{ $suggestion->offer_text ?? 'Offre spéciale' }}
-                            </div>
-                            <div class="thumbnail product-box text-center">
-                                <img src="{{ url($suggestion->image ?? 'assets/img/products/default-product-image.jpg') }}"
-                                    alt="{{ $suggestion->name }}" class="img-responsive suggestions-carousel" />
-                                <div class="caption">
-                                    <h5><a href="{{ route('frontoffice.products.show', ['id' => $product->id]) }}">{{ $suggestion->name }}</a></h5>
+                        <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
+                            <div class="card text-center mt-2 position-relative">
+                                @if ($suggestion->discount)
+                                    <img src="{{ asset('assets/img/offre-special.png') }}" alt="Special Offer"
+                                        class="offer-badge">
+                                @endif
+                                <img src="{{ url($suggestion->image ?? 'img/products/default-product-image.jpg') }}"
+                                    alt="{{ $suggestion->name }}" class="card-img-top"
+                                    style="height: 180px; object-fit: cover;">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <a href="{{ route('frontoffice.products.show', ['id' => $suggestion->id]) }}"
+                                            class="text-decoration-none">
+                                            {{ $suggestion->name }}
+                                        </a>
+                                    </h6>
                                 </div>
                             </div>
                         </div>
                     @endforeach
                 </div>
 
-                <!-- Contrôles du slider -->
-                <a class="left carousel-control" href="#suggestionsCarousel" data-slide="prev">
-                    <span class="glyphicon glyphicon-chevron-left"></span>
-                </a>
-                <a class="right carousel-control" href="#suggestionsCarousel" data-slide="next">
-                    <span class="glyphicon glyphicon-chevron-right"></span>
-                </a>
+                <button class="carousel-control-prev" type="button" data-bs-target="#suggestionsCarousel"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#suggestionsCarousel"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                </button>
             </div>
         </div>
-
     </div>
 @endsection

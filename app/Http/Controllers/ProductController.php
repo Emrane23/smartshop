@@ -26,14 +26,15 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'stock' => 'required|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'discount' => 'nullable|integer|min:0|max:80',
         ]);
 
-        $imagePath = null; 
+        $imagePath = null;
         if ($request->hasFile('image')) {
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $imagePath = 'assets/img/products/' . $imageName;
-            $image->move(public_path('assets/img/products'), $imageName);
+            $imagePath = 'img/products/' . $imageName;
+            $image->move(public_path('img/products'), $imageName);
         }
 
         Product::create([
@@ -42,6 +43,7 @@ class ProductController extends Controller
             'stock' => $request->stock,
             'description' => $request->description,
             'image' => $imagePath,
+            'discount' => $request->discount
         ]);
 
         return redirect()->route('products.index')->with('success', 'Product added successfully.');
@@ -51,13 +53,13 @@ class ProductController extends Controller
     {
         return view('dashboard.products.edit', compact('product'));
     }
-    
+
     public function show(Product $product)
     {
         if (!$product) {
             abort(404);
         }
-        
+
         return view('dashboard.products.show', compact('product'));
     }
 
@@ -69,19 +71,20 @@ class ProductController extends Controller
             'price' => 'required|numeric',
             'stock' => 'required|integer',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'discount' => 'nullable|integer|min:0|max:80',
         ]);
 
         $imagePath = $product->image;
 
         if ($request->hasFile('image')) {
-            if ($product->image && file_exists($product->image)) {
+            if ($product->image && file_exists($product->image) && ($product->image != Product::DEFAULT_IMAGE)) {
                 unlink(public_path($product->image));
             }
 
             $image = $request->file('image');
             $imageName = time() . '.' . $image->getClientOriginalExtension();
-            $imagePath = 'assets/img/products/' . $imageName;
-            $image->move(public_path('assets/img/products'), $imageName);
+            $imagePath = 'img/products/' . $imageName;
+            $image->move(public_path('img/products'), $imageName);
         }
 
         $product->update([
@@ -90,6 +93,7 @@ class ProductController extends Controller
             'stock' => $request->stock,
             'description' => $request->description,
             'image' => $imagePath,
+            'discount' => $request->discount
         ]);
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
@@ -97,7 +101,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        if ($product->image && file_exists(public_path($product->image))) {
+        if ($product->image && file_exists($product->image) && ($product->image != Product::DEFAULT_IMAGE)) {
             unlink(public_path($product->image));
         }
 

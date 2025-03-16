@@ -26,7 +26,7 @@ class HomeController extends Controller
 
                 return $query->whereNotIn('order_items.product_id', $purchased_products);
             })
-            ->select('products.id', 'products.name', 'products.image', DB::raw('COUNT(order_items.product_id) as popularity'))
+            ->select('products.id', 'products.name', 'products.image','products.discount', DB::raw('COUNT(order_items.product_id) as popularity'))
             ->groupBy('products.id', 'products.name', 'products.image')
             ->orderByDesc('popularity')
             ->limit(5)
@@ -38,7 +38,7 @@ class HomeController extends Controller
     public function showProduct($id)
     {
         $product = Product::findOrFail($id);
-        $otherProducts = Product::where('id', '!=', $id)->inRandomOrder()->take(4)->latest();
+        $otherProducts = Product::where('id', '!=', $id)->latest()->inRandomOrder()->take(4)->get();
 
         return view('frontoffice.pages.show-product', compact('product', 'otherProducts'));
     }

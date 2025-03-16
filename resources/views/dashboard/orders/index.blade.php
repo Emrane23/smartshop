@@ -38,7 +38,7 @@
                                 <td>
                                     <ul>
                                         @foreach ($order->products as $product)
-                                            <li>{{ $product->name }}</li>
+                                            <li><a href="{{ route('products.show', ['product' => $product]) }}">{{ $product->name }}</a></li>
                                         @endforeach
                                     </ul>
                                 </td>

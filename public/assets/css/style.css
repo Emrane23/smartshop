@@ -359,22 +359,20 @@ a:hover {
     margin-top: 0px;
 }
 
-.offer-text {
+.offer-badge {
     position: absolute;
-    color: #FFF;
-    padding: 14px 16px 12px 16px;
-    margin-top: 10px;
-    background-color: #18b424;
-
+    top: 10px;
+    left: 10px;
+    width: 60px;
+    height: auto;
+    z-index: 10;
 }
 
-.offer-text2 {
+.offer-badge-small {
     position: absolute;
-    color: #FFF;
-    padding: 14px 16px 12px 16px;
-    margin-top: 10px;
-    background-color: #EB0429;
-
+    top: -5px;
+    left: -5px;
+    width: 50px;
 }
 
 /*=======================================
