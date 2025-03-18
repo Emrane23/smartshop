@@ -119,4 +119,22 @@ class OrderController extends Controller
             ], 500);
         }
     }
+
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'order_id' => 'required|exists:orders,id',
+            'status' => 'required|in:pending,confirmed,completed,cancelled'
+        ]);
+        $order = Order::find($request->order_id);
+
+        if (in_array($order->status, ['canceled', 'completed'])) {
+            return response()->json(['success' => false, 'message' => 'Cannot modify a canceled or completed order.'], 403);
+        }
+
+        $order->status = $request->status;
+        $order->save();
+
+        return response()->json(['success' => true, 'message' => "Status $request->status successfully.", 'newStatusResponse' => $order->status]);
+    }
 }

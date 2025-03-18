@@ -8,7 +8,7 @@
         <thead class="table-light">
             <tr>
                 <th>Image</th>
-                <th>Produit</th>
+                <th>Product</th>
                 <th>Price</th>
                 <th>Actions</th>
             </tr>

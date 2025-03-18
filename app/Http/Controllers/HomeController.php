@@ -14,9 +14,9 @@ class HomeController extends Controller
     {
         $customer_id = auth('customer')->id();
 
-        $products = Product::orderBy('created_at','DESC')->paginate(3);
+        $products = Product::orderBy('created_at', 'DESC')->paginate(3);
 
-            $recommended_products = DB::table('order_items')
+        $recommended_products = DB::table('order_items')
             ->join('products', 'order_items.product_id', '=', 'products.id')
             ->when($customer_id, function ($query) use ($customer_id) {
                 $purchased_products = DB::table('order_items')
@@ -26,7 +26,7 @@ class HomeController extends Controller
 
                 return $query->whereNotIn('order_items.product_id', $purchased_products);
             })
-            ->select('products.id', 'products.name', 'products.image','products.discount', DB::raw('COUNT(order_items.product_id) as popularity'))
+            ->select('products.id', 'products.name', 'products.image', 'products.discount', DB::raw('COUNT(order_items.product_id) as popularity'))
             ->groupBy('products.id', 'products.name', 'products.image')
             ->orderByDesc('popularity')
             ->limit(5)
@@ -40,6 +40,6 @@ class HomeController extends Controller
         $product = Product::findOrFail($id);
         $otherProducts = Product::where('id', '!=', $id)->latest()->inRandomOrder()->take(4)->get();
 
-        return view('frontoffice.pages.show-product', compact('product', 'otherProducts'));
+        return view('frontoffice.pages.show-product', get_defined_vars());
     }
 }

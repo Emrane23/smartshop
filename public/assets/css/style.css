@@ -36,8 +36,38 @@ body {
 }
 
 
-.text-center {
-    text-align: center;
+
+.pagination {
+    display: flex;
+    justify-content: center; /* Centre horizontalement */
+    padding-left: 0; /* Supprime le padding par défaut de la liste */
+    list-style: none; /* Supprime les puces de la liste */
+}
+
+.rating-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 20px;
+}
+
+.stars {
+    display: flex;
+    font-size: 30px;
+    cursor: pointer;
+}
+
+.stars i {
+    color: #ccc; /* Étoiles vides */
+    transition: color 0.2s;
+}
+
+.stars i.full {
+    color: gold; /* Étoiles remplies */
+}
+
+.rating-summary {
+    pointer-events: none; /* Désactive les clics */
 }
 
 
@@ -253,14 +283,9 @@ a:hover {
     font-weight: bold;
 }
 
-.cart-footer h5 span {
-    color: red;
-    /* Seulement le prix en rouge */
-}
 
 .cart-item-details span {
     font-weight: bold;
-    color: red;
     /* Prix en rouge */
 }
 

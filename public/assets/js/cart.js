@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         ${item.discount
                         ? `<span class="text-decoration-line-through text-danger">${price.toFixed(2)} TND</span>
                                    <span class="fw-bold text-warning">${discountedPrice.toFixed(2)} TND</span>`
-                        : `<span class="fw-bold">${price.toFixed(2)} TND</span>`
+                        : `<span class="fw-bold text-danger">${price.toFixed(2)} TND</span>`
                     }
                     </div>
                     <button class="remove-btn-product" data-index="${index}">&times;</button>
@@ -110,7 +110,7 @@ document.addEventListener("DOMContentLoaded", function () {
                         ${item.discount
                         ? `<span class="text-decoration-line-through text-danger">${price.toFixed(2)} TND</span>
                                    <span class="fw-bold text-warning">${discountedPrice.toFixed(2)} TND</span>`
-                        : `<span class="fw-bold">${price.toFixed(2)} TND</span>`
+                        : `<span class="fw-bold text-danger">${price.toFixed(2)} TND</span>`
                     }
                     </td>
                     <td><button class="remove-btn-product" data-index="${index}">&times;</button></td>
@@ -137,7 +137,8 @@ document.addEventListener("DOMContentLoaded", function () {
             cart.splice(index, 1);
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCart();
-            toastr.info("Product removed from cart.");
+            alertToastr(`Product removed from cart.`,'info');
+
             toggleOrderButton();
         }, 500);
 
@@ -159,7 +160,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         if (cart.length === 0) {
-            toastr.error("Your cart is empty.");
+            alertToastr(`Your cart is empty.`,'danger');
             return;
         }
 
@@ -177,19 +178,18 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json().then(data => ({ status: response.status, body: data })))
             .then(({ status, body }) => {
                 if (status === 200 && body.success) {
-                    toastr.success("Order placed successfully!");
+                    alertToastr("Order placed successfully!",'success');
                     clearCart();
                 } else if (status === 422) {
                     Object.values(body.errors).forEach(messages => {
-                        messages.forEach(message => toastr.error(message));
+                        messages.forEach(message => alertToastr(message,'danger'));
                     });
                 } else {
-                    toastr.error(body.message || "An error occurred.");
+                    alertToastr(body.message || "An error occurred.",'danger');
                 }
             })
             .catch(error => {
-                console.error("Error:", error);
-                toastr.error("Something went wrong.");
+                alertToastr("Something went wrong.",'danger');                
             });
     });
 
@@ -209,7 +209,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let cartIcon = document.getElementById("cart-icon");
             cartIcon.classList.add("cart-bounce");
             setTimeout(() => cartIcon.classList.remove("cart-bounce"), 300);
-            toastr.success(`${product.name} added to cart!`);
+            alertToastr(`${product.name} added to cart!`,'success');
         });
     });
 

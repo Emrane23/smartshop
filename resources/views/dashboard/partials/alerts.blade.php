@@ -4,7 +4,7 @@
         const toastrOptions = {
             timeOut: 10000,
             closeButton: true,
-            progressBar: true
+            progressBar: false
         };
 
 

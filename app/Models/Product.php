@@ -23,4 +23,36 @@ class Product extends Model
     {
         return $value ?? static::DEFAULT_IMAGE;
     }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    public function averageRating()
+    {
+        return $this->ratings()->avg('rating') ?? 0;
+    }
+
+    public function canRate($customer_id)
+    {
+        $completedOrders = $this->orders()
+            ->where('customer_id', $customer_id)
+            ->where('status', 'completed')
+            ->whereHas('products', function ($query) {
+                $query->where('product_id', $this->id);
+            })
+            ->get();
+
+        if ($completedOrders->isEmpty()) {
+            return false;
+        }
+
+        $existingRating = Rating::where('product_id', $this->id)
+            ->where('customer_id', $customer_id)
+            ->whereIn('order_id', $completedOrders->pluck('id'))
+            ->exists();
+
+        return !$existingRating;
+    }
 }

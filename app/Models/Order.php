@@ -9,7 +9,7 @@ class Order extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['customer_id', 'total'];
+    protected $fillable = ['customer_id', 'total', 'status'];
 
     public function customer()
     {
@@ -22,4 +22,15 @@ class Order extends Model
             ->withPivot('quantity', 'price')
             ->withTimestamps();
     }
+
+    public function isCompleted()
+    {
+        return $this->status === 'completed';
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+    
 }

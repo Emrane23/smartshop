@@ -33,7 +33,7 @@
                                 <h5 class="card-title">
                                     <a href="{{ route('frontoffice.products.show', ['id' => $product->id]) }}"
                                         class="text-decoration-none">
-                                        {{ $product->name }}
+                                        {{ Str::limit($product->name, 50, ' ...') }}
                                     </a>
                                 </h5>
 
@@ -43,15 +43,18 @@
                                     @php
                                         $newPrice = $product->price - ($product->price * $product->discount) / 100;
                                     @endphp
-                                    <p class="fw-bold text-muted text-decoration-line-through">{{ $product->price }} Dt</p>
+                                    <p class="fw-bold text-danger text-decoration-line-through">
+                                        {{ number_format($product->price, 2) }} Dt</p>
                                     <p class="fw-bold text-warning">{{ number_format($newPrice, 2) }} Dt
-                                        (-{{ $product->discount }}%)</p>
+                                        (-{{ number_format($product->discount, 2) }}%)
+                                    </p>
                                 @else
-                                    <p class="fw-bold text-danger">{{ $product->price }} Dt</p>
+                                    <p class="fw-bold text-danger">{{ number_format($product->price, 2) }} Dt</p>
                                 @endif
 
-                                <p class="text-muted small">Shared at:
-                                    {{ $product->created_at->translatedFormat('M d, Y') }}</p>
+                                <x-rating-summary :rating="$product->ratings()->avg('rating')" :totalReviews="$product->ratings()->count()" :productId="$product->id" :displaytotalReviews="true"
+                                    :displayReviewsText="false" :disableJs="true" :displayChevron="false" :displayAverageRatings="false" :dFlex="false" />
+
                                 <a href="{{ route('frontoffice.products.show', ['id' => $product->id]) }}"
                                     class="btn btn-primary">See Details</a>
                             </div>

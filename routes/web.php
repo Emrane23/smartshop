@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RatingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,6 +35,9 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/customer-area', [CustomerController::class, 'CustomerArea'])->name('customer.area')->middleware('auth:customer');
+Route::post('/sendRating', [RatingController::class, 'sendRating'])->name('send.rating')->middleware('auth:customer');
+Route::get('/ratings/{productId}', [RatingController::class, 'getRatingDistribution']);
+
 Route::middleware(['auth:web,customer'])->group(function () {
     Route::get('/cart', function () {
         return view('frontoffice.pages.cart');
@@ -46,14 +50,13 @@ Route::prefix('dashboard')->group(function () {
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/home', [DashboardController::class, 'index'])->name('dashboard.home');
         Route::resource('products', ProductController::class);
+        Route::post('/update-status', [OrderController::class, 'updateStatus'])->name('update.status');
         Route::get('/orders', [OrderController::class, 'index'])->name('dashboard.orders.index');
-    });
-
-
-    Route::controller(AnalyticsController::class)->group(function () {
-        Route::get('/sales', 'predictSales')->name('analytics.sales');
-        Route::get('/recommendations/{customer_id}', 'recommendProducts')->name('analytics.recommendations');
-        Route::get('/report', 'exportPDF')->name('sales.report.download');
+        Route::controller(AnalyticsController::class)->group(function () {
+            Route::get('/sales', 'predictSales')->name('analytics.sales');
+            Route::get('/recommendations/{customer_id}', 'recommendProducts')->name('analytics.recommendations');
+            Route::get('/report', 'exportPDF')->name('sales.report.download');
+        });
     });
 });
 

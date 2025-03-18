@@ -20,6 +20,13 @@
                         @else
                             <img src="https://via.placeholder.com/300" alt="No Image" class="img-fluid rounded">
                         @endif
+
+                        @if ($product->ratings()->count() > 0)
+                            <x-rating-summary :rating="$product->ratings()->avg('rating')" :totalReviews="$product->ratings()->count()" :productId="$product->id" :displaytotalReviews="false"
+                                :disableJs="false" />
+                        @else
+                            <span class="badge bg-secondary mt-2">No Ratings</span>
+                        @endif
                     </div>
                     <div class="col-md-8">
                         <table class="table table-bordered">

@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
-    public function showPoints($id)
-    {
-        $customer = Customer::findOrFail($id);
-        return response()->json(['points' => $customer->points]);
-    }
     
     public function CustomerArea()
     {

@@ -28,15 +28,18 @@
                             <th>Price</th>
                             <th>Discount</th>
                             <th>Stock</th>
+                            <th>Reviews</th> <!-- Nouvelle colonne -->
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>Image</th>
+                            <th>Name</th>
                             <th>Price</th>
                             <th>Discount</th>
                             <th>Stock</th>
+                            <th>Reviews</th> <!-- Footer mis à jour -->
                             <th>Actions</th>
                         </tr>
                     </tfoot>
@@ -56,12 +59,41 @@
                                 <td>{{ $product->price }}</td>
                                 <td>
                                     @if ($product->discount)
-                                        {{ $product->discount }}%
+                                        <span
+                                            class="
+                                            badge 
+                                            @if ($product->discount >= 50) bg-danger 
+                                            @elseif ($product->discount >= 20) bg-warning 
+                                            @else bg-success @endif
+                                        ">
+                                            {{ $product->discount }}%
+                                        </span>
                                     @else
-                                        No Discount
+                                        <span class="badge bg-secondary">No Discount</span>
                                     @endif
                                 </td>
+
                                 <td>{{ $product->stock }}</td>
+
+                                <!-- Nouvelle colonne pour l'affichage du rating -->
+                                <td>
+                                    @php
+                                        $totalReviews = $product->ratings()->count() ;
+                                    @endphp
+                                    @if ($product->ratings()->count() > 0)
+                                        <x-rating-summary 
+                                            :rating="$product->ratings()->avg('rating')" 
+                                            :totalReviews="$totalReviews" 
+                                            :productId="$product->id" 
+                                            :displaytotalReviews="false"
+                                            :disableJs="true" 
+                                        />
+                                    @else
+                                        <span class="badge bg-secondary">No Reviews</span>
+                                    @endif
+                                </td>
+                                
+
                                 <td>
                                     <a href="{{ route('products.show', ['product' => $product]) }}"
                                         class="btn btn-info btn-sm text-white">Show</a>
