@@ -87,10 +87,10 @@
         const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
 
         for (let i = 0; i < fullStars; i++) {
-            starContainer.innerHTML += `<i class="fa fa-star text-warning"></i>`;
+            starContainer.innerHTML += `<i class="fa fa-star text-info"></i>`;
         }
         if (halfStar) {
-            starContainer.innerHTML += `<i class="fa fa-star-half-o text-warning"></i>`;
+            starContainer.innerHTML += `<i class="fa fa-star-half-o text-info"></i>`;
         }
         for (let i = 0; i < emptyStars; i++) {
             starContainer.innerHTML += `<i class="fa fa-star" style="color: lightgray"></i>`;
@@ -125,7 +125,7 @@
             progressBarContainer.style.height = '10px';
 
             const progressBar = document.createElement('div');
-            progressBar.className = 'progress-bar bg-warning';
+            progressBar.className = 'progress-bar bg-info';
             progressBar.role = 'progressbar';
             progressBar.style.width = '0%';
             progressBar.style.transition = 'width 1.5s ease';

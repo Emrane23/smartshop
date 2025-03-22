@@ -5,6 +5,7 @@
     'productId',
     'displaytotalReviews',
     'disableJs',
+    'alt' => false,
     'displayChevron' => true,
     'displayReviewsText' => true,
     'displayAverageRatings' => true,
@@ -25,15 +26,15 @@
         @if ($totalReviews == 0)
             {{-- Afficher 5 étoiles jaunes si aucune évaluation --}}
             @for ($i = 0; $i < 5; $i++)
-                <i class="fa fa-star text-warning"></i>
+                <i class="fa fa-star text-info"></i>
             @endfor
         @else
             {{-- Afficher les étoiles normales --}}
             @for ($i = 0; $i < $fullStars; $i++)
-                <i class="fa fa-star text-warning"></i>
+                <i class="fa fa-star text-info"></i>
             @endfor
             @if ($halfStar)
-                <i class="fa fa-star-half-o text-warning"></i>
+                <i class="fa fa-star-half-{{ $alt ? 'alt' : 'o' }} text-info"></i>
             @endif
             @for ($i = 0; $i < $emptyStars; $i++)
                 <i class="fa fa-star" style="color: lightgray"></i>
@@ -63,7 +64,7 @@
             {{-- Conteneur pour le spinner --}}
             <div id="spinner" class="d-flex justify-content-center align-items-center"
                 style="height: 100px; display: none;">
-                <div class="spinner-border text-warning" role="status">
+                <div class="spinner-border text-info" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </div>

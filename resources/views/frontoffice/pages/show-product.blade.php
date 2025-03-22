@@ -56,7 +56,7 @@
                                     @php
                                         $newPrice = $product->price - ($product->price * $product->discount) / 100;
                                     @endphp
-                                    <p class="fw-bold text-muted text-decoration-line-through">{{ $product->price }} Dt</p>
+                                    <p class="fw-bold text-danger text-decoration-line-through">{{ $product->price }} Dt</p>
                                     <p class="fw-bold text-warning">{{ number_format($newPrice, 2) }} Dt
                                         (-{{ $product->discount }}%)</p>
                                 @else
@@ -82,6 +82,88 @@
                         <hr>
                         <h4>Description</h4>
                         <p>{{ $product->description }}</p>
+                    </div>
+                </div>
+                <!-- Section des Témoignages -->
+                <div class="card shadow-sm mt-4">
+                    <div class="card-body">
+                        <h4>Customer Testimonials</h4>
+                        <hr>
+
+                        <!-- Flèches de Contrôle au-Dessus du Carousel -->
+                        <div class="d-flex justify-content-center mb-3 gap-2">
+                            <!-- gap-2 pour réduire l'espace entre les boutons -->
+                            <button class="btn btn-link p-2" type="button"
+                                data-bs-target="#testimonialsCarousel" data-bs-slide="prev">
+                                <span class="fa fa-chevron-left fa-lg"></span> <!-- Grande flèche gauche -->
+                            </button>
+                            <button class="btn btn-link p-2" type="button"
+                                data-bs-target="#testimonialsCarousel" data-bs-slide="next">
+                                <span class="fa fa-chevron-right fa-lg"></span> <!-- Grande flèche droite -->
+                            </button>
+                        </div>
+
+                        <!-- Carousel -->
+                        <div id="testimonialsCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-inner">
+                                <!-- Témoignage 1 -->
+                                <div class="carousel-item active">
+                                    <div class="testimonial">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="rating">
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star"></span>
+                                            </div>
+                                            <small class="text-muted">January 15, 2023</small>
+                                        </div>
+                                        <p class="testimonial-text mt-2">"This product is amazing! I love it so much. Highly
+                                            recommended!"</p>
+                                        <p class="testimonial-author">- John Doe</p>
+                                    </div>
+                                </div>
+
+                                <!-- Témoignage 2 -->
+                                <div class="carousel-item">
+                                    <div class="testimonial">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="rating">
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star"></span>
+                                                <span class="fa fa-star"></span>
+                                            </div>
+                                            <small class="text-muted">March 10, 2023</small>
+                                        </div>
+                                        <p class="testimonial-text mt-2">"Great quality and fast shipping. Will buy again!"
+                                        </p>
+                                        <p class="testimonial-author">- Jane Smith</p>
+                                    </div>
+                                </div>
+
+                                <!-- Témoignage 3 -->
+                                <div class="carousel-item">
+                                    <div class="testimonial">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="rating">
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                                <span class="fa fa-star checked"></span>
+                                            </div>
+                                            <small class="text-muted">June 5, 2023</small>
+                                        </div>
+                                        <p class="testimonial-text mt-2">"Excellent service and the product exceeded my
+                                            expectations."</p>
+                                        <p class="testimonial-author">- Mike Johnson</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -116,12 +198,13 @@
                                 @php
                                     $newOtherPrice = $other->price - ($other->price * $other->discount) / 100;
                                 @endphp
-                                <p class="fw-bold text-muted text-decoration-line-through mb-0">{{ $other->price }} Dt</p>
+                                <p class="fw-bold text-danger text-decoration-line-through mb-0">{{ $other->price }} Dt
+                                </p>
                                 <p class="fw-bold text-warning mb-0">{{ number_format($newOtherPrice, 2) }} Dt
                                     (-{{ $other->discount }}%)
                                 </p>
                             @else
-                                <p class="fw-bold text-success mb-0">{{ $other->price }} Dt</p>
+                                <p class="fw-bold text-danger mb-0">{{ $other->price }} Dt</p>
                             @endif
                         </div>
                     </div>
@@ -131,7 +214,6 @@
     </div>
 
     @include('frontoffice.partials.rating_modal')
-
     @push('scripts')
         <script src="{{ asset('assets/js/rating.js') }}"></script>
     @endpush

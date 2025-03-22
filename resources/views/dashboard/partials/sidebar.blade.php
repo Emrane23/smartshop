@@ -17,6 +17,10 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-shopping-basket"></i></div>
                     Products
                 </a>
+                <a class="nav-link {{ request()->routeIs('testimonials.index') ? 'active' : '' }}" href="{{ route('testimonials.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
+                    Testimonials
+                </a>
             </div>
         </div>
         <div class="sb-sidenav-footer">

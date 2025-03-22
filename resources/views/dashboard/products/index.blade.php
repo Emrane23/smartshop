@@ -75,7 +75,6 @@
 
                                 <td>{{ $product->stock }}</td>
 
-                                <!-- Nouvelle colonne pour l'affichage du rating -->
                                 <td>
                                     @php
                                         $totalReviews = $product->ratings()->count() ;
@@ -87,6 +86,7 @@
                                             :productId="$product->id" 
                                             :displaytotalReviews="false"
                                             :disableJs="true" 
+                                            :alt="true"
                                         />
                                     @else
                                         <span class="badge bg-secondary">No Reviews</span>

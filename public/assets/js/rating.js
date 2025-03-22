@@ -133,10 +133,10 @@ document.addEventListener('DOMContentLoaded', function () {
             starContainer.style.opacity = "0";
 
             for (let i = 0; i < fullStars; i++) {
-                starContainer.appendChild(createStar("fa-star", "text-warning"));
+                starContainer.appendChild(createStar("fa-star", "text-info"));
             }
             if (halfStar) {
-                starContainer.appendChild(createStar("fa-star-half-o", "text-warning"));
+                starContainer.appendChild(createStar("fa-star-half-o", "text-info"));
             }
             for (let i = 0; i < emptyStars; i++) {
                 starContainer.appendChild(createStar("fa-star", "", "color: lightgray;"));
@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 popup.innerHTML = `
                     <button type="button" class="btn-close position-absolute top-0 end-0 m-2 close-popup"></button>
                     <div id="spinner" class="d-flex justify-content-center align-items-center" style="height: 100px; display: none;">
-                        <div class="spinner-border text-warning" role="status">
+                        <div class="spinner-border text-info" role="status">
                             <span class="visually-hidden">Loading...</span>
                         </div>
                     </div>
