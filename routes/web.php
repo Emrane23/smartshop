@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
@@ -56,6 +57,13 @@ Route::prefix('dashboard')->group(function () {
             Route::get('/sales', 'predictSales')->name('analytics.sales');
             Route::get('/recommendations/{customer_id}', 'recommendProducts')->name('analytics.recommendations');
             Route::get('/report', 'exportPDF')->name('sales.report.download');
+        });
+        Route::controller(CommentController::class)->group(function () {
+            Route::get('/comments', 'index')->name('comments.index');
+            Route::patch('/comment/{id}/publish', 'publish')->name('comment.publish');
+            Route::delete('/comment/{id}', 'destroy')->name('comment.destroy');
+            Route::patch('/comment/{id}/restore', 'restore')->name('comment.restore');
+            Route::patch('/comment/{id}/pending', 'setToPending')->name('comment.pending');
         });
     });
 });

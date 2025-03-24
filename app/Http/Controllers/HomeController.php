@@ -14,7 +14,7 @@ class HomeController extends Controller
     {
         $customer_id = auth('customer')->id();
 
-        $products = Product::orderBy('created_at', 'DESC')->paginate(3);
+        $products = Product::with('ratings')->latest()->paginate(6);
 
         $recommended_products = DB::table('order_items')
             ->join('products', 'order_items.product_id', '=', 'products.id')
@@ -32,12 +32,19 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
 
-        return view('frontoffice.pages.home', compact('products', 'recommended_products'));
+        $topRatedProducts = Product::with('ratings')
+            ->withAvg('ratings', 'rating')
+            ->orderByDesc('ratings_avg_rating') 
+            ->take(8)
+            ->get();
+
+        return view('frontoffice.pages.home', compact('products', 'recommended_products', 'topRatedProducts'));
     }
 
     public function showProduct($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with(['ratings.publishedComments'])->findOrFail($id);
+
         $otherProducts = Product::where('id', '!=', $id)->latest()->inRandomOrder()->take(4)->get();
 
         return view('frontoffice.pages.show-product', get_defined_vars());

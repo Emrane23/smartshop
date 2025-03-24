@@ -90,80 +90,56 @@
                         <h4>Customer Testimonials</h4>
                         <hr>
 
-                        <!-- Flèches de Contrôle au-Dessus du Carousel -->
-                        <div class="d-flex justify-content-center mb-3 gap-2">
-                            <!-- gap-2 pour réduire l'espace entre les boutons -->
-                            <button class="btn btn-link p-2" type="button"
-                                data-bs-target="#testimonialsCarousel" data-bs-slide="prev">
-                                <span class="fa fa-chevron-left fa-lg"></span> <!-- Grande flèche gauche -->
-                            </button>
-                            <button class="btn btn-link p-2" type="button"
-                                data-bs-target="#testimonialsCarousel" data-bs-slide="next">
-                                <span class="fa fa-chevron-right fa-lg"></span> <!-- Grande flèche droite -->
-                            </button>
-                        </div>
+                        @php
+                            $publishedComments = $product->ratings->filter(function ($rating) {
+                                return !empty($rating->comment);
+                            });
+                        @endphp
 
-                        <!-- Carousel -->
-                        <div id="testimonialsCarousel" class="carousel slide" data-bs-ride="carousel">
-                            <div class="carousel-inner">
-                                <!-- Témoignage 1 -->
-                                <div class="carousel-item active">
-                                    <div class="testimonial">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="rating">
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star"></span>
-                                            </div>
-                                            <small class="text-muted">January 15, 2023</small>
-                                        </div>
-                                        <p class="testimonial-text mt-2">"This product is amazing! I love it so much. Highly
-                                            recommended!"</p>
-                                        <p class="testimonial-author">- John Doe</p>
-                                    </div>
+                        @if ($publishedComments->isNotEmpty())
+                            <!-- Flèches de Contrôle au-Dessus du Carousel (si plus d'un commentaire) -->
+                            @if ($publishedComments->count() > 1)
+                                <div class="d-flex justify-content-center mb-3 gap-2">
+                                    <button class="btn btn-link p-2" type="button" data-bs-target="#testimonialsCarousel"
+                                        data-bs-slide="prev">
+                                        <span class="fa fa-chevron-left fa-lg"></span>
+                                    </button>
+                                    <button class="btn btn-link p-2" type="button" data-bs-target="#testimonialsCarousel"
+                                        data-bs-slide="next">
+                                        <span class="fa fa-chevron-right fa-lg"></span>
+                                    </button>
                                 </div>
+                            @endif
 
-                                <!-- Témoignage 2 -->
-                                <div class="carousel-item">
-                                    <div class="testimonial">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="rating">
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star"></span>
-                                                <span class="fa fa-star"></span>
+                            <!-- Carousel -->
+                            <div id="testimonialsCarousel" class="carousel slide" data-bs-ride="carousel">
+                                <div class="carousel-inner">
+                                    @foreach ($publishedComments as $index => $rating)
+                                        <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                                            <div class="testimonial">
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div class="rating">
+                                                        @for ($i = 1; $i <= 5; $i++)
+                                                            <span
+                                                                class="fa fa-star {{ $i <= $rating->rating ? 'text-info' : 'custom-lightgray' }}"></span>
+                                                        @endfor
+                                                    </div>
+                                                    <small
+                                                        class="text-muted">{{ $rating->comment->created_at->format('F d, Y') }}</small>
+                                                </div>
+                                                <p class="testimonial-text mt-2">"{{ $rating->comment->comment }}"</p>
+                                                <p class="testimonial-author">
+                                                    - {{ $rating->customer->name }}
+                                                </p>
                                             </div>
-                                            <small class="text-muted">March 10, 2023</small>
                                         </div>
-                                        <p class="testimonial-text mt-2">"Great quality and fast shipping. Will buy again!"
-                                        </p>
-                                        <p class="testimonial-author">- Jane Smith</p>
-                                    </div>
-                                </div>
-
-                                <!-- Témoignage 3 -->
-                                <div class="carousel-item">
-                                    <div class="testimonial">
-                                        <div class="d-flex justify-content-between align-items-center">
-                                            <div class="rating">
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                                <span class="fa fa-star checked"></span>
-                                            </div>
-                                            <small class="text-muted">June 5, 2023</small>
-                                        </div>
-                                        <p class="testimonial-text mt-2">"Excellent service and the product exceeded my
-                                            expectations."</p>
-                                        <p class="testimonial-author">- Mike Johnson</p>
-                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
-                        </div>
+                        @else
+                            <p class="text-muted">No reviews yet. Only customers who have purchased this product may leave a
+                                review.</p>
+                        @endif
                     </div>
                 </div>
             </div>

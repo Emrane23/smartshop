@@ -43,7 +43,7 @@
                                     <ul>
                                         @foreach ($order->products as $product)
                                             <li><a
-                                                    href="{{ route('products.show', ['product' => $product]) }}">{{ $product->name }}</a>
+                                                    href="{{ route('products.show', ['product' => $product]) }}">{{ Str::limit($product->name, 50, ' ...') }}</a>
                                             </li>
                                         @endforeach
                                     </ul>

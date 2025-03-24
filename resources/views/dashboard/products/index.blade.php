@@ -55,7 +55,7 @@
                                     @endif
                                 </td>
 
-                                <td>{{ $product->name }}</td>
+                                <td>{{ Str::limit($product->name, 50, ' ...') }}</td>
                                 <td>{{ $product->price }}</td>
                                 <td>
                                     @if ($product->discount)
@@ -104,7 +104,7 @@
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger btn-sm"
-                                            onclick="return confirm('Are you sure you want to delete the product {{ $product->name }}?')">Delete</button>
+                                            onclick="return confirm('Are you sure you want to delete the product {{ Str::limit($product->name, 50, ' ...') }}?')">Delete</button>
                                     </form>
                                 </td>
                             </tr>

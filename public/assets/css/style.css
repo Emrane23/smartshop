@@ -90,6 +90,10 @@ body {
     margin-bottom: 20px;
 }
 
+.custom-lightgray {
+    color: lightgray;
+}
+
 .testimonial-text {
     font-style: italic;
     color: #555;

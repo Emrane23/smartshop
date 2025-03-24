@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Product;
 use App\Models\Rating;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class RatingController extends Controller
 {
@@ -25,25 +27,30 @@ class RatingController extends Controller
             return response()->json(['success' => false, 'message' => 'You cannot rate this product.'], 403);
         }
 
-        $existingRating = Rating::where('order_id', $request->order_id)
-            ->where('product_id', $request->product_id)
-            ->where('customer_id', $customer->id)
-            ->first();
+        DB::transaction(function () use ($request, $customer, $product) {
+            $rating = Rating::updateOrCreate(
+                [
+                    'order_id' => $request->order_id,
+                    'product_id' => $request->product_id,
+                    'customer_id' => $customer->id,
+                ],
+                [
+                    'rating' => $request->rating,
+                ]
+            );
 
-        if ($existingRating) {
-            $existingRating->update([
-                'rating' => $request->rating,
-                'comment' => $request->comment,
-            ]);
-        } else {
-            Rating::create([
-                'customer_id' => $customer->id,
-                'order_id' => $request->order_id,
-                'product_id' => $request->product_id,
-                'rating' => $request->rating,
-                'comment' => $request->comment,
-            ]);
-        }
+            if ($request->filled('comment')) {
+                Comment::updateOrCreate(
+                    [
+                        'rating_id' => $rating->id,
+                    ],
+                    [
+                        'comment' => $request->comment,
+                        'published_at' => $request->rating >= 4 ? now() : null,
+                    ]
+                );
+            }
+        });
 
         Cache::forget("product_rating_distribution_{$request->product_id}");
 

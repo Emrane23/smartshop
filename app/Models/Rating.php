@@ -9,7 +9,7 @@ class Rating extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['customer_id', 'order_id', 'product_id', 'rating', 'comment'];
+    protected $fillable = ['customer_id', 'order_id', 'product_id', 'rating'];
 
     public function customer()
     {
@@ -24,5 +24,15 @@ class Rating extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function comment()
+    {
+        return $this->hasOne(Comment::class);
+    }
+
+    public function publishedComments()
+    {
+        return $this->hasOne(Comment::class)->whereNotNull('published_at');
     }
 }
