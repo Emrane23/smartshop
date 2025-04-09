@@ -56,6 +56,19 @@
                                     @endif
                                 </td>
                             </tr>
+                            <tr>
+                                <th>Categories</th>
+                                <td>
+                                    @if ($product->categories && $product->categories->count())
+                                        @foreach ($product->categories as $category)
+                                            <span class="badge bg-primary me-1">{{ $category->name }}</span>
+                                        @endforeach
+                                    @else
+                                        <span class="text-muted">No Categories</span>
+                                    @endif
+                                </td>
+                            </tr>
+                            
 
                             <tr>
                                 <th>Created At</th>

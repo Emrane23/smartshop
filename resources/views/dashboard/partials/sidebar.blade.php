@@ -21,11 +21,15 @@
                     <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
                     Manage Comments
                 </a>
+                <a class="nav-link {{ request()->routeIs('categories.index') ? 'active' : '' }}" href="{{ route('categories.index') }}">
+                    <div class="sb-nav-link-icon"><i class="fas fa-tags"></i></div>
+                    Categories
+                </a>
             </div>
         </div>
         <div class="sb-sidenav-footer">
             <div class="small">Logged in as:</div>
-            Admin
+            {{ auth()->user()->name }}
         </div>
     </nav>
 </div>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
@@ -10,11 +11,20 @@ use Illuminate\Support\Facades\DB;
 class HomeController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
         $customer_id = auth('customer')->id();
+        $category_id = $request->query('category');
 
-        $products = Product::with('ratings')->latest()->paginate(6);
+        $productsQuery = Product::with('ratings')->latest();
+
+        if ($category_id) {
+            $productsQuery->whereHas('categories', function ($query) use ($category_id) {
+                $query->where('categories.id', $category_id);
+            });
+        }
+
+        $products = $productsQuery->paginate(6);
 
         $recommended_products = DB::table('order_items')
             ->join('products', 'order_items.product_id', '=', 'products.id')
@@ -27,18 +37,20 @@ class HomeController extends Controller
                 return $query->whereNotIn('order_items.product_id', $purchased_products);
             })
             ->select('products.id', 'products.name', 'products.image', 'products.discount', DB::raw('COUNT(order_items.product_id) as popularity'))
-            ->groupBy('products.id', 'products.name', 'products.image')
+            ->groupBy('products.id', 'products.name', 'products.image', 'products.discount')
             ->orderByDesc('popularity')
             ->limit(5)
             ->get();
 
         $topRatedProducts = Product::with('ratings')
             ->withAvg('ratings', 'rating')
-            ->orderByDesc('ratings_avg_rating') 
+            ->orderByDesc('ratings_avg_rating')
             ->take(8)
             ->get();
 
-        return view('frontoffice.pages.home', compact('products', 'recommended_products', 'topRatedProducts'));
+        $categories = Category::orderBy('name')->get();
+
+        return view('frontoffice.pages.home', compact('products', 'recommended_products', 'topRatedProducts', 'categories', 'category_id'));
     }
 
     public function showProduct($id)

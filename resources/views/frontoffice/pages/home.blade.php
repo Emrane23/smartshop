@@ -20,6 +20,16 @@
                     </ol>
                 </nav>
 
+                <div class="row">
+                    @if ($category_id)
+                        <h4 class="mb-4">
+                            Products in category:
+                            <span class="text-primary">
+                                {{ optional($categories->firstWhere('id', $category_id))->name }}
+                            </span>
+                        </h4>
+                    @endif
+                </div>
                 <div class="row g-4">
                     @foreach ($products as $product)
                         <div class="col-lg-4 col-md-6 text-center">
@@ -91,7 +101,7 @@
                                         <h6 class="card-title">
                                             <a href="{{ route('frontoffice.products.show', ['id' => $suggestion->id]) }}"
                                                 class="text-decoration-none">
-                                                {{ $suggestion->name }}
+                                                {{ Str::limit($suggestion->name, 20, ' ...') }}
                                             </a>
                                         </h6>
                                     </div>
@@ -109,7 +119,28 @@
                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
                     </button>
                 </div>
+
+                <!-- ✅ Liste des catégories -->
+                <div class="mb-4 mt-4">
+                    <h4 class="text-center">🗂 Browse by Category</h4>
+                    <hr>
+                    <div style="max-height: 570px; overflow-y: auto;">
+                        <ul class="list-group list-group-flush">
+                            @foreach ($categories as $category)
+                                <li class="list-group-item p-2">
+                                    <a href="{{ route('home', ['category' => $category->id]) }}"
+                                        class="text-decoration-none {{ $category_id == $category->id ? 'fw-bold text-primary' : '' }}">
+                                         {{ $category->name }}
+                                     </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    </div>
+                </div>
+
+
             </div>
+
         </div>
 
         <!-- ✅ Section Top Rated (pleine largeur, sous les suggestions) -->

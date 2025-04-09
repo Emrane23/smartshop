@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,8 @@ class ProductController extends Controller
 
     public function create()
     {
-        return view('dashboard.products.create');
+        $categories = Category::all();
+        return view('dashboard.products.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -37,7 +39,7 @@ class ProductController extends Controller
             $image->move(public_path('img/products'), $imageName);
         }
 
-        Product::create([
+        $product = Product::create([
             'name' => $request->name,
             'price' => $request->price,
             'stock' => $request->stock,
@@ -46,12 +48,15 @@ class ProductController extends Controller
             'discount' => $request->discount
         ]);
 
+        $product->categories()->sync($request->categories);
+
         return redirect()->route('products.index')->with('success', 'Product added successfully.');
     }
 
     public function edit(Product $product)
     {
-        return view('dashboard.products.edit', compact('product'));
+        $categories = Category::all();
+        return view('dashboard.products.edit', compact('product', 'categories'));
     }
 
     public function show(Product $product)
@@ -59,7 +64,8 @@ class ProductController extends Controller
         if (!$product) {
             abort(404);
         }
-
+        $product->load('categories', 'ratings');
+        
         return view('dashboard.products.show', compact('product'));
     }
 
@@ -95,6 +101,8 @@ class ProductController extends Controller
             'image' => $imagePath,
             'discount' => $request->discount
         ]);
+
+        $product->categories()->sync($request->categories);
 
         return redirect()->route('products.index')->with('success', 'Product updated successfully.');
     }

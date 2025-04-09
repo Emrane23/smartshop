@@ -18,35 +18,40 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
+        // User::create([
+        //     'name' => 'Admin',
+        //     'email' => 'admin@example.com',
+        //     'password' => Hash::make('password'),
+        //     'role' => 'admin',
+        // ]);
+
+        // $products = Product::factory(20)->create();
+
+        // Customer::factory(10)->create()->each(function ($customer) use ($products) {
+        //     Order::factory(rand(1, 3))->create(['customer_id' => $customer->id])->each(function ($order) use ($products) {
+        //         $total = 0;
+
+        //         $selectedProducts = $products->random(rand(1, 5));
+
+        //         foreach ($selectedProducts as $product) {
+        //             $quantity = rand(1, 5);
+        //             $price = $product->price * $quantity;
+
+        //             $order->products()->attach($product->id, [
+        //                 'quantity' => $quantity,
+        //                 'price' => $price,
+        //             ]);
+
+        //             $total += $price;
+        //         }
+
+        //         $order->update(['total' => $total]);
+        //     });
+        // });
+
+        $this->call([
+            CategorySeeder::class,
+            AssignCategoriesToProductsSeeder::class,
         ]);
-
-        $products = Product::factory(20)->create();
-
-        Customer::factory(10)->create()->each(function ($customer) use ($products) {
-            Order::factory(rand(1, 3))->create(['customer_id' => $customer->id])->each(function ($order) use ($products) {
-                $total = 0;
-
-                $selectedProducts = $products->random(rand(1, 5));
-
-                foreach ($selectedProducts as $product) {
-                    $quantity = rand(1, 5);
-                    $price = $product->price * $quantity;
-
-                    $order->products()->attach($product->id, [
-                        'quantity' => $quantity,
-                        'price' => $price,
-                    ]);
-
-                    $total += $price;
-                }
-
-                $order->update(['total' => $total]);
-            });
-        });
     }
 }

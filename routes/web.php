@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\DashboardController;
@@ -38,6 +39,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/customer-area', [CustomerController::class, 'CustomerArea'])->name('customer.area')->middleware('auth:customer');
 Route::post('/sendRating', [RatingController::class, 'sendRating'])->name('send.rating')->middleware('auth:customer');
 Route::get('/ratings/{productId}', [RatingController::class, 'getRatingDistribution']);
+Route::get('/category/{id}/products', [ProductController::class, 'productsByCategory'])->name('category.products');
 
 Route::middleware(['auth:web,customer'])->group(function () {
     Route::get('/cart', function () {
@@ -51,6 +53,7 @@ Route::prefix('dashboard')->group(function () {
     Route::middleware(['role:admin'])->group(function () {
         Route::get('/home', [DashboardController::class, 'index'])->name('dashboard.home');
         Route::resource('products', ProductController::class);
+        Route::resource('/categories', CategoryController::class);
         Route::post('/update-status', [OrderController::class, 'updateStatus'])->name('update.status');
         Route::get('/orders', [OrderController::class, 'index'])->name('dashboard.orders.index');
         Route::controller(AnalyticsController::class)->group(function () {

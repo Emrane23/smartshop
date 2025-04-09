@@ -55,4 +55,9 @@ class Product extends Model
 
         return !$existingRating;
     }
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
 }
