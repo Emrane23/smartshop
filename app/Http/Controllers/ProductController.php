@@ -10,7 +10,7 @@ class ProductController extends Controller
 {
     public function index()
     {
-        $products = Product::orderBy('created_at', 'DESC')->get();
+        $products = Product::latest()->paginate(10);
         return view('dashboard.products.index', compact('products'));
     }
 

@@ -15,7 +15,7 @@ class OrderController extends Controller
 {
     public function index()
     {
-        $orders = Order::with('products')->orderBy('created_at', 'DESC')->get();
+        $orders = Order::with('products')->orderBy('created_at', 'DESC')->paginate(10);
         return view('dashboard.orders.index', compact('orders'));
     }
 
@@ -129,12 +129,12 @@ class OrderController extends Controller
         $order = Order::find($request->order_id);
 
         if (in_array($order->status, ['canceled', 'completed'])) {
-            return response()->json(['success' => false, 'message' => 'Cannot modify a canceled or completed order.'], 403);
+            return response()->back()->with('error', 'Cannot modify a canceled or completed order.');
         }
 
         $order->status = $request->status;
         $order->save();
 
-        return response()->json(['success' => true, 'message' => "Status $request->status successfully.", 'newStatusResponse' => $order->status]);
+        return redirect()->back()->with('success', 'Order status updated successfully.');
     }
 }

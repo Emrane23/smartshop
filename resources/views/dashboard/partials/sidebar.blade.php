@@ -1,35 +1,62 @@
-<div id="layoutSidenav_nav">
-    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-        <div class="sb-sidenav-menu">
-            <div class="nav">
-                <div class="sb-sidenav-menu-heading">Core</div>
-                <a class="nav-link {{ request()->routeIs('dashboard.home') ? 'active' : '' }}" href="{{ route('dashboard.home') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
-                    Dashboard
-                </a>
-                
-                <div class="sb-sidenav-menu-heading">Pages</div>
-                <a class="nav-link {{ request()->routeIs('dashboard.orders.index') ? 'active' : '' }}" href="{{ route('dashboard.orders.index') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-shopping-cart"></i></div>
-                    Orders
-                </a>
-                <a class="nav-link {{ request()->routeIs('products.index') ? 'active' : '' }}" href="{{ route('products.index') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-shopping-basket"></i></div>
-                    Products
-                </a>
-                <a class="nav-link {{ request()->routeIs('comments.index') ? 'active' : '' }}" href="{{ route('comments.index') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-comments"></i></div>
-                    Manage Comments
-                </a>
-                <a class="nav-link {{ request()->routeIs('categories.index') ? 'active' : '' }}" href="{{ route('categories.index') }}">
-                    <div class="sb-nav-link-icon"><i class="fas fa-tags"></i></div>
-                    Categories
-                </a>
-            </div>
-        </div>
-        <div class="sb-sidenav-footer">
-            <div class="small">Logged in as:</div>
-            {{ auth()->user()->name }}
-        </div>
-    </nav>
-</div>
+<aside class="app-sidebar bg-body-secondary shadow" data-bs-theme="dark">
+    <div class="sidebar-brand">
+        <a href="{{ route('dashboard.home') }}" class="brand-link">
+            <img src="{{ asset('assets/img/AdminLTELogo.png') }}" alt="Admin Logo" class="brand-image opacity-75 shadow">
+            <span class="brand-text fw-light">Admin</span>
+        </a>
+    </div>
+
+    <div class="sidebar-wrapper">
+        <nav class="mt-2">
+            <ul class="nav sidebar-menu flex-column" data-lte-toggle="treeview" role="menu" data-accordion="false">
+
+                <!-- Dashboard -->
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.home') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.home') ? 'active' : '' }}">
+                        <i class="nav-icon bi bi-speedometer2"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+
+                <!-- Customers -->
+                <li class="nav-item">
+                    <a href="{{ route('customers.index') }}"
+                        class="nav-link {{ request()->routeIs('customers.index') ? 'active' : '' }}">
+                        <i class="nav-icon bi bi-people-fill"></i>
+                        <p>Customers</p>
+                    </a>
+                </li>
+
+                <!-- Orders -->
+                <li class="nav-item">
+                    <a href="{{ route('dashboard.orders.index') }}"
+                        class="nav-link {{ request()->routeIs('dashboard.orders.index') ? 'active' : '' }}">
+                        <i class="nav-icon bi bi-cart-fill"></i>
+                        <p>Orders</p>
+                    </a>
+                </li>
+
+                <!-- Products -->
+                <li class="nav-item">
+                    <a href="{{ route('products.index') }}"
+                        class="nav-link {{ request()->routeIs('products.index') ? 'active' : '' }}">
+                        <i class="nav-icon bi bi-box-seam"></i>
+                        <p>Products</p>
+                    </a>
+                </li>
+
+                <!-- Categories -->
+                <li class="nav-item">
+                    <a href="{{ route('categories.index') }}"
+                        class="nav-link {{ request()->routeIs('categories.index') ? 'active' : '' }}">
+                        <i class="nav-icon bi bi-tags-fill"></i>
+                        <p>Categories</p>
+                    </a>
+                </li>
+
+
+            </ul>
+        </nav>
+    </div>
+</aside>

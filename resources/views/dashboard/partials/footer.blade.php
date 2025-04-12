@@ -1,12 +1,8 @@
-<footer class="py-4 bg-light mt-auto">
-    <div class="container-fluid px-4">
-        <div class="d-flex align-items-center justify-content-between small">
-            <div class="text-muted">Copyright &copy; {{ date('Y') }} {{ request()->getHost() }}</div>
-            <div>
-                <a href="#">Privacy Policy</a>
-                &middot;
-                <a href="#">Terms &amp; Conditions</a>
-            </div>
-        </div>
-    </div>
-</footer>
+<footer class="app-footer"> <!--begin::To the end-->
+    <div class="float-end d-none d-sm-inline">Anything you want</div> <!--end::To the end--> <!--begin::Copyright--> <strong>
+        Copyright &copy; {{ date('Y') }}&nbsp;
+        <a href="{{ request()->getHost() }}" class="text-decoration-none">{{ request()->getHost() }}</a>.
+    </strong>
+    All rights reserved.
+    <!--end::Copyright-->
+</footer> <!--end::Footer-->

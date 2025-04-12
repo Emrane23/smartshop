@@ -8,7 +8,12 @@ use Illuminate\Support\Facades\Auth;
 
 class CustomerController extends Controller
 {
-    
+    public function index()
+    {
+        $customers = Customer::latest()->paginate(10);
+        return view('dashboard.customers.index', compact('customers'));
+    }
+
     public function CustomerArea()
     {
         $customer = Auth::guard('customer')->user();

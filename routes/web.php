@@ -51,10 +51,11 @@ Route::middleware(['auth:web,customer'])->group(function () {
 
 Route::prefix('dashboard')->group(function () {
     Route::middleware(['role:admin'])->group(function () {
+        Route::post('/update-status', [OrderController::class, 'updateStatus'])->name('update.status');
+        Route::get('/customers', [CustomerController::class, 'index'])->name('customers.index');
         Route::get('/home', [DashboardController::class, 'index'])->name('dashboard.home');
         Route::resource('products', ProductController::class);
         Route::resource('/categories', CategoryController::class);
-        Route::post('/update-status', [OrderController::class, 'updateStatus'])->name('update.status');
         Route::get('/orders', [OrderController::class, 'index'])->name('dashboard.orders.index');
         Route::controller(AnalyticsController::class)->group(function () {
             Route::get('/sales', 'predictSales')->name('analytics.sales');

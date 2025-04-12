@@ -10,7 +10,6 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $customers = Customer::all();
         $sales = DB::table('order_items')
             ->join('products', 'order_items.product_id', '=', 'products.id')
             ->selectRaw('products.name as product_name, SUM(order_items.quantity) as total_sales')
