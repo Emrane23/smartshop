@@ -28,7 +28,7 @@
                         <div class="card mb-4">
                             <div class="card-header d-flex justify-content-between">
                                 <h3 class="card-title">Loyalty Points of Customers</h3>
-                                <a href="#" class="link-primary">View Report</a>
+                                {{-- <a href="#" class="link-primary">View Report</a> --}}
                             </div>
                             <div class="card-body">
                                 <div id="pointsChart"></div>
@@ -41,7 +41,7 @@
                         <div class="card mb-4">
                             <div class="card-header d-flex justify-content-between">
                                 <h3 class="card-title">Sales Prediction</h3>
-                                <a href="{{ route('sales.report.download') }}" class="btn btn-sm btn-primary">
+                                <a href="{{ route('sales.report.download') }}" class="btn btn-sm btn-success">
                                     <i class="bi bi-download me-1"></i> Download Sales Report
                                 </a>
                             </div>
