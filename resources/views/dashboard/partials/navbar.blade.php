@@ -26,7 +26,7 @@
                         
                     </li> <!--end::Menu Body--> <!--begin::Menu Footer-->
                     <li class="user-footer">
-                        <a href="#" class="btn btn-default btn-flat">Profile</a>
+                        <a href="{{ route('home') }}" class="btn btn-default btn-flat" target="_blank">Website</a>
 
                         <form method="POST" action="{{ route('logout') }}" class="d-inline float-end">
                             @csrf

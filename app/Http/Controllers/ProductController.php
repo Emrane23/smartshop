@@ -64,7 +64,7 @@ class ProductController extends Controller
         if (!$product) {
             abort(404);
         }
-        $product->load('categories', 'ratings');
+        $product->load('categories');
         
         return view('dashboard.products.show', compact('product'));
     }

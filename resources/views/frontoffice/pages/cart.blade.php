@@ -1,25 +1,25 @@
 @extends('layouts.base')
 
 @section('content')
-<div class="container py-4">
-    <h2 class="fw-bold mb-3 mt-3"><i class="fa fa-shopping-cart"></i> Your Cart</h2>
-    
-    <table class="table">
-        <thead class="table-light">
-            <tr>
-                <th>Image</th>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody id="cart-list">
-        </tbody>
-    </table>
+<div class="container py-5">
+    <h2 class="fw-bold mb-4"><i class="fa fa-shopping-cart me-2"></i> Your Cart</h2>
 
-    <h4 class="fw-bold">Total: <span class="cart-total text-danger">0.00 TND</span></h4>
+    <div id="cart-list" class="row g-4">
+        <!-- Items will be dynamically injected here -->
+    </div>
 
-    <button class="btn btn-success btn-lg" id="place-order" data-url="{{ route('order.store') }}">
-        <i class="fa fa-credit-card"></i> Order
-    </button>
+    <div class="row mt-5 justify-content-end">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 p-4">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="fw-bold mb-0">🧾 Total:</h4>
+                    <h4 class="cart-total text-danger fw-bold mb-0">0.00 TND</h4>
+                </div>
+                <button class="btn btn-success btn-lg w-100" id="place-order" data-url="{{ route('order.store') }}">
+                    <i class="fa fa-credit-card me-2"></i> Place Order
+                </button>
+            </div>
+        </div>
+    </div>
 </div>
+@endsection

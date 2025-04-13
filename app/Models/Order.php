@@ -27,10 +27,5 @@ class Order extends Model
     {
         return $this->status === 'completed';
     }
-
-    public function ratings()
-    {
-        return $this->hasMany(Rating::class);
-    }
     
 }

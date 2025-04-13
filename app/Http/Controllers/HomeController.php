@@ -15,8 +15,7 @@ class HomeController extends Controller
     {
         $customer_id = auth('customer')->id();
         $category_id = $request->query('category');
-
-        $productsQuery = Product::with('ratings')->latest();
+        $productsQuery = Product::latest();
 
         if ($category_id) {
             $productsQuery->whereHas('categories', function ($query) use ($category_id) {
@@ -24,7 +23,7 @@ class HomeController extends Controller
             });
         }
 
-        $products = $productsQuery->paginate(6);
+        $products = $productsQuery->paginate(4);
 
         $recommended_products = DB::table('order_items')
             ->join('products', 'order_items.product_id', '=', 'products.id')
@@ -42,20 +41,14 @@ class HomeController extends Controller
             ->limit(5)
             ->get();
 
-        $topRatedProducts = Product::with('ratings')
-            ->withAvg('ratings', 'rating')
-            ->orderByDesc('ratings_avg_rating')
-            ->take(8)
-            ->get();
-
         $categories = Category::orderBy('name')->get();
 
-        return view('frontoffice.pages.home', compact('products', 'recommended_products', 'topRatedProducts', 'categories', 'category_id'));
+        return view('frontoffice.pages.home', compact('products', 'recommended_products','categories', 'category_id'));
     }
 
     public function showProduct($id)
     {
-        $product = Product::with(['ratings.publishedComments'])->findOrFail($id);
+        $product = Product::findOrFail($id);
 
         $otherProducts = Product::where('id', '!=', $id)->latest()->inRandomOrder()->take(4)->get();
 

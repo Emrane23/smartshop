@@ -95,27 +95,42 @@ document.addEventListener("DOMContentLoaded", function () {
         if (!cartItemsContainer) return;
 
         cartItemsContainer.innerHTML = "";
+
         if (cart.length === 0) {
-            cartItemsContainer.innerHTML = `<tr><td colspan="4" class="text-center">Your Cart is empty.</td></tr>`;
+            cartItemsContainer.innerHTML = `
+                <div class="col-12 text-center">
+                    <p class="text-muted">🛒 Your cart is empty.</p>
+                </div>
+            `;
         } else {
             cart.forEach((item, index) => {
                 let price = parseFloat(item.price);
                 let discountedPrice = item.discount ? price - (price * item.discount / 100) : price;
 
-                let tr = document.createElement("tr");
-                tr.innerHTML = `
-                    <td><img src="${item.image}" alt="${item.name}" class="img-fluid rounded" style="width: 50px;"></td>
-                    <td>${item.name}</td>
-                    <td>
-                        ${item.discount
+                let card = document.createElement("div");
+                card.classList.add("col-md-6", "col-lg-4");
+                card.setAttribute("id", `cart-item-${index}`);
+
+                card.innerHTML = `
+                    <div class="card border-0 shadow-sm h-100">
+                        <img src="${item.image}" alt="${item.name}" class="card-img-top object-fit-cover" style="height: 200px;">
+                        <div class="card-body">
+                            <h5 class="card-title fw-bold">${item.name}</h5>
+                            <p class="text-muted">Price:
+                                ${item.discount
                         ? `<span class="text-decoration-line-through text-danger">${price.toFixed(2)} TND</span>
-                                   <span class="fw-bold text-warning">${discountedPrice.toFixed(2)} TND</span>`
+                                           <span class="fw-bold text-warning ms-2">${discountedPrice.toFixed(2)} TND</span>`
                         : `<span class="fw-bold text-danger">${price.toFixed(2)} TND</span>`
                     }
-                    </td>
-                    <td><button class="remove-btn-product" data-index="${index}">&times;</button></td>
+                            </p>
+                            <button class="btn btn-outline-danger btn-sm remove-btn-product" data-index="${index}">
+                                <i class="fa fa-trash me-1"></i> Remove
+                            </button>
+                        </div>
+                    </div>
                 `;
-                cartItemsContainer.appendChild(tr);
+
+                cartItemsContainer.appendChild(card);
             });
         }
     }
@@ -137,7 +152,7 @@ document.addEventListener("DOMContentLoaded", function () {
             cart.splice(index, 1);
             localStorage.setItem("cart", JSON.stringify(cart));
             updateCart();
-            alertToastr(`Product removed from cart.`,'info');
+            alertToastr(`Product removed from cart.`, 'info');
 
             toggleOrderButton();
         }, 500);
@@ -160,7 +175,7 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
         if (cart.length === 0) {
-            alertToastr(`Your cart is empty.`,'danger');
+            alertToastr(`Your cart is empty.`, 'danger');
             return;
         }
 
@@ -178,18 +193,18 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(response => response.json().then(data => ({ status: response.status, body: data })))
             .then(({ status, body }) => {
                 if (status === 200 && body.success) {
-                    alertToastr("Order placed successfully!",'success');
+                    alertToastr("Order placed successfully!", 'success');
                     clearCart();
                 } else if (status === 422) {
                     Object.values(body.errors).forEach(messages => {
-                        messages.forEach(message => alertToastr(message,'danger'));
+                        messages.forEach(message => alertToastr(message, 'danger'));
                     });
                 } else {
-                    alertToastr(body.message || "An error occurred.",'danger');
+                    alertToastr(body.message || "An error occurred.", 'danger');
                 }
             })
             .catch(error => {
-                alertToastr("Something went wrong.",'danger');                
+                alertToastr("Something went wrong.", 'danger');
             });
     });
 
@@ -209,7 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let cartIcon = document.getElementById("cart-icon");
             cartIcon.classList.add("cart-bounce");
             setTimeout(() => cartIcon.classList.remove("cart-bounce"), 300);
-            alertToastr(`${product.name} added to cart!`,'success');
+            alertToastr(`${product.name} added to cart!`, 'success');
         });
     });
 

@@ -1,24 +1,7 @@
-﻿/*=============================================================
-    Authour URI: www.binarytheme.com
-    License: Commons Attribution 3.0
-
-    http://creativecommons.org/licenses/by/3.0/
-
-    100% To use For Personal And Commercial Use.
-    IN EXCHANGE JUST GIVE US CREDITS AND TELL YOUR FRIENDS ABOUT US
-   
-    ========================================================  */
-
-
-
-
-
-/*=======================================
-    GENERAL STYLES
-==================================================*/
+﻿
 body {
     padding-top: 70px;
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 14px;
 }
 
@@ -83,37 +66,16 @@ body {
     transition: color 0.3s ease; /* Animation au survol */
 }
 
-.testimonial {
-    padding: 15px;
-    background-color: #f9f9f9;
-    border-left: 5px solid #007bff;
-    margin-bottom: 20px;
-}
 
 .custom-lightgray {
     color: lightgray;
 }
 
-.testimonial-text {
-    font-style: italic;
-    color: #555;
-    margin-top: 10px;
-}
-
-.testimonial-author {
-    text-align: right;
-    font-weight: bold;
-    color: #333;
-}
 
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-family: 'Open Sans', sans-serif;
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
 }
 
 .alg-right-pad {
