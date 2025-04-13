@@ -37,7 +37,6 @@ Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('regi
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/customer-area', [CustomerController::class, 'CustomerArea'])->name('customer.area')->middleware('auth:customer');
-Route::get('/category/{id}/products', [ProductController::class, 'productsByCategory'])->name('category.products');
 
 Route::middleware(['auth:web,customer'])->group(function () {
     Route::get('/cart', function () {
