@@ -39,6 +39,7 @@ class DatabaseSeeder extends Seeder
 
                     $order->products()->attach($product->id, [
                         'price' => $price,
+                        'quantity' => $quantity
                     ]);
 
                     $total += $price;
